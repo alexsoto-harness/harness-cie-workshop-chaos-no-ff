@@ -1,6 +1,6 @@
 # Lab 1 - Build
 
-### Summary
+## Summary
 Setup a CI Pipeline, including running source code tests, building the executable, building and pushing the artifact to a remote repository
 
 ### Outcome
@@ -14,7 +14,7 @@ A Deployable artifact
 
 - Run unit tests during the process to verify that the build is successful using Harness CI
 
-**Steps**
+## Steps
 
 1. From the left hand menu, navigate to **Projects** → **Select the project available**
 
@@ -39,48 +39,49 @@ A Deployable artifact
     | Clone Codebase | Enabled | *This indicates that the codebase will be cloned* |
     | Repository Name | harnessrepo | *This is the name of the repository* |
 
-6. There are two main tabs that need configuration:
-    1. **Infrastructure**
+6. There are **two** main tabs that need configuration:
+    ### Infrastructure
 
-        | Input | Value | Notes |
-        | ----  | ----- | ----- |
-        | Infrastructure | Cloud | *Harness Cloud provides managed build infrastructure on demand* |
+   | Input | Value | Notes |
+   | ----  | ----- | ----- |
+   | Infrastructure | Cloud | *Harness Cloud provides managed build infrastructure on demand* |
 
-    2. **Execution**
-        - Select **Add Step**, then **Add Step** again, then select **Test Intelligence** from the Step Library and configure with the following
+    ### Execution
 
-        | Input | Value | Notes |
-        | ----  | ----- | ----- |
-        | Name | Run Tests With Intelligence | *Test Intelligence speeds up test execution by running only the teststhat are relevant to the changes made in the codebase.* |
-        | Command | pip install pytest & cd ./python-tests | *The github repo is a monorepo with application(s) and configuration in the same repo. Therefore we need to navigate to the application subfolder.* |
+   - Select **Add Step**, then **Add Step** again, then select **Test Intelligence** from the Step Library and configure with the following
 
-        - After completing configuration select **Apply Changes** from the top right of the configuration popup
+   | Input | Value | Notes |
+   | ----  | ----- | ----- |
+   | Name | Run Tests With Intelligence | *Test Intelligence speeds up test execution by running only the tests that are relevant to the changes made in the codebase.* |
+   | Command | pip install pytest & cd ./python-tests | *The github repo is a monorepo with application(s) and configuration in the same repo. Therefore we need to navigate to the application subfolder* |
 
-        - Select **Add Step**, then **Use template** (In this step we will be building the binary following same config as before. To avoid duplication of efforts a template has been precreated)
+   - After completing configuration select **Apply Changes** from the top right of the configuration popup
 
-        | Input | Value | Notes |
-        | ----- | ----- | ----- |
-        | Template Name | Compile Application | *This template provides us a reusable and standard way to build Angular applications* |
+   - Select **Add Step**, then **Use template** (In this step we will be building the binary following same config as before. To avoid duplication of efforts a template has been precreated)
 
-        - Select the template and press **Use Template,** then provide a name for that template
+   | Input | Value | Notes |
+   | ----- | ----- | ----- |
+   | Template Name | Compile Application | *This template provides us a reusable and standard way to build Angular applications* |
 
-        | Input | Value | Notes |
-        | ----- | ----- | ----- |
-        | Name  | Compile | *Name of the template in the pipeline* |
+   - Select the template and press **Use Template,** then provide a name for that template
 
-        - Select **Add Step**, then **Add Step** again, then select **Build and Push an image to Docker Registry** from the Step Library and configure with the following
+   | Input | Value | Notes |
+   | ----- | ----- | ----- |
+   | Name  | Compile | *Name of the template in the pipeline* |
 
-        | Input | Value | Notes |
-        | ----- | ----- | ----- |
-        | Name  |Push to DockerHub | |
-        | Docker Connector | dockerhub | |
-        | Docker Repository | nikpap/harness-workshop | |
-        | Tags | <+variable.username>-<+pipeline.sequenceId> | *This will be the tag of the image using harness expressions. Click on the pin and select expression and paste the value* |
-        | **Optional Configuration** | | |
-        | Dockerfile | /harness/frontend-app/harness-webapp/Dockerfile |  *This tells harness where is the Dockerfile for building the app* |
-        | Context | /harness/frontend-app/harness-webapp | *This tells from where to run the instructions included in the dockerfile* |
+   - Select **Add Step**, then **Add Step** again, then select **Build and Push an image to Docker Registry** from the Step Library and configure with the following
 
-        - Click **Apply Changes** to close the config dialog
+   | Input | Value | Notes |
+   | ----- | ----- | ----- |
+   | Name  |Push to DockerHub | |
+   | Docker Connector | dockerhub | |
+   | Docker Repository | nikpap/harness-workshop | |
+   | Tags | <+variable.username>-<+pipeline.sequenceId> | *This will be the tag of the image using harness expressions. Click on the pin and select expression and paste the value* |
+   | **Optional Configuration** | | |
+   | Dockerfile | /harness/frontend-app/harness-webapp/Dockerfile |  *This tells harness where is the Dockerfile for building the app* |
+   | Context | /harness/frontend-app/harness-webapp | *This tells from where to run the instructions included in the dockerfile* |
+
+   - Click **Apply Changes** to close the config dialog
 
   7. Click **Save** and then click **Run** to execute the pipeline with the following inputs
 
@@ -90,11 +91,10 @@ A Deployable artifact
 
 # Lab 2 - DevSecOps
 
-**Summary:** Our security team has implemented orchestration of **Fortify** and **OWASP** scans for our code in a reusable form **(templates)**. In order to improve our security posture they have also added policies to enforce us to include those templates
+## Summary:
+Our security team has implemented orchestration of **Fortify** and **OWASP** scans for our code in a reusable form **(templates)**. In order to improve our security posture they have also added policies to enforce us to include those templates
 
-![](https://lh7-us.googleusercontent.com/docsz/AD_4nXcLr5TGcKRWOjVgB_sCAHHEeLPyd6EBdnkt2-mq_imTkZbQMEwJD03Q1wZyhWqHxoCNIIYWJWlRbnZrvZn2pPYIwTzXlOGdhMDEgn-J2JnK7lVastmfpdwTqDHXjpP0DK3TgU1gM-Ec_0iZLicWV7KpgW2FdXUCcAtraDGaEz8hI3dpWGLXkg?key=cRG2cvp_PHVW0KG2Gq6Y_A)
-
-**Learning Objective(s):**
+### Learning Objective(s):
 
 - Understand how governance plays a role in the path to production
 
@@ -102,11 +102,14 @@ A Deployable artifact
 
 - DevSecOps practices can be easily achieved
 
-**Steps**
+![](https://lh7-us.googleusercontent.com/docsz/AD_4nXcLr5TGcKRWOjVgB_sCAHHEeLPyd6EBdnkt2-mq_imTkZbQMEwJD03Q1wZyhWqHxoCNIIYWJWlRbnZrvZn2pPYIwTzXlOGdhMDEgn-J2JnK7lVastmfpdwTqDHXjpP0DK3TgU1gM-Ec_0iZLicWV7KpgW2FdXUCcAtraDGaEz8hI3dpWGLXkg?key=cRG2cvp_PHVW0KG2Gq6Y_A)
+
+## Steps
 
 1. In the existing pipeline, within the Build stage **before** PushToDockerhub step click on the plus icon to add a new step
 
-2. Select use template\
+2. Select use template
+
    ![](https://lh7-us.googleusercontent.com/docsz/AD_4nXeC5rTVxlk7DeZeU_cINwcKo6Nf2wVW9brQ9MiCEfppJwmU-uH3QcNZ53qTxhur57KeySksoDBg9EqjhgKOgAEDKon6iNz9cFxozBe9VZssV-t77VNo6t1zPUvm6e2NOZJDKncxd9c2GM4HE-h-L4cIOl4u6Uqx_azoKchMdg?key=cRG2cvp_PHVW0KG2Gq6Y_A)
 
 3. Select **DevX Fortify Scan** 
@@ -129,12 +132,12 @@ A Deployable artifact
 
 After the **Build and Push** stage is complete, go to the **Security Tests** tab to see the deduplicated, normalized and prioritized list of vulnerabilities discovered across your scanners.
 
-
 # Lab 3 - Continuous Deploy - Frontend
 
-### Summary: Extend your existing pipeline to take the artifact built in the CI/Build stage and deploy it to an environment
+## Summary: 
+Extend your existing pipeline to take the artifact built in the CI/Build stage and deploy it to an environment
 
-**Learning Objective(s):**
+### Learning Objective(s):
 
 - Add a second stage to an existing pipeline
 
@@ -146,147 +149,160 @@ After the **Build and Push** stage is complete, go to the **Security Tests** tab
 
 - Create an Input Set
 
-**Steps**
+## Steps
 
-2. In the existing pipeline, add a Deployment stage by clicking **Add Stage** and select **Deploy** as the Stage Type
+1. In the existing pipeline, add a Deployment stage by clicking **Add Stage** and select **Deploy** as the Stage Type
 
-3. Enter the following values and click on **Set Up Stage**
+2. Enter the following values and click on **Set Up Stage**
 
    | Input | Value | Notes |
    | ----- | ----- | ----- |
    | Stage Name | frontend | |
    | Deployment Type | Kubernetes | |
 
-4. Configure the **frontend** Stage with the following\
-   **Service**
+3. Configure the **frontend** Stage with the following
+   
+   ### Service
+   
+   - Click **+Add Service** and configure as follows
 
-- Click **+Add Service** and configure as follows****
+   | Input | Value | Notes |
+   | ----- | ----- | ----- |
+   | Name | frontend | |
+   | Deployment Type | Kubernetes | |
+   | **Add Manifest** | | |
+   | Manifest Type | K8s Manifest | |
+   | K8s Manifest Store | Code | |
+   | Manifest Identifier | templates | |
+   | Repository | harnessrepo | |
+   | Branch | main | |
+   | File/Folder Path | harness-deploy/frontend/manifests | |
+   | Values.yaml | harness-deploy/frontend/values.yaml | |
+   | **Add Artifact Source** | | |
+   | Artifact Repository Type | Docker Registry | |
+   | Docker Registry Connector  |dockerhub | |
+   | Artifact Source Identifier |frontend | |
+   | Image Path | nikpap/harness-workshop |                                    |
+   | Tag | <+variable.username>-<+pipeline.sequenceId> | *Select value, then click on the pin and select expression and paste the value* |
 
+   - Click **Save** to close the service window and then click **Continue** to go to the Environment tab
 
-| Input                      | Value                                               | Notes                              |
-| -------------------------- | --------------------------------------------------- | ---------------------------------- |
-| Name                       |frontend|                                    |
-| Deployment Type            |Kubernetes|                                    |
-| * **Add Manifest**         |                                                     |                                    |
-| Manifest Type              |K8s Manifest|                                    |
-| K8s Manifest Store         |Code|                                    |
-| Manifest Identifier        |templates|                                    |
-| Repository                 |harnessrepo|                                    |
-| Branch                     |main|                                    |
-| File/Folder Path           |harness-deploy/frontend/manifests|                                    |
-| Values.yaml                |harness-deploy/frontend/values.yaml|                                    |
-| - **Add Artifact Source**  |                                                     |                                    |
-| Artifact Repository Type   |Docker Registry|                                    |
-| Docker Registry Connector  |dockerhub|                                    |
-| Artifact Source Identifier |frontend|                                    |
-| Image Path                 |nikpap/harness-workshop|                                    |
-| Tag                        |<+variable.username>-<+pipeline.sequenceId>| Select value, then click on the pin and select expression and paste the value |
+   ### Environment
+   The target infrastructure has been pre-created for us. The application will be deployed to a GKE cluster on the given namespace  
 
-- Click **Save** to close the service window and then click **Continue** to go to the Environment tab
+   - Click **- Select -** on the **"Specify Environment"** input box
 
-**Environment**
-
-The target infrastructure has been pre-created for us. The application will be deployed to a GKE cluster on the given namespace  
-
-- Click **- Select -** on the **"Specify Environment"** input box 
-
-- Select **prod** environment and click **"Apply Selected"**
+   - Select **prod** environment and click **"Apply Selected"**
 
    | Input | Value | Notes |
    | ----- | ----- | ----- |
    | Name | prod | *Make sure to select the environment and infrastructure definition* |
 
-- Click **- Select -** on the **"Specify Infrastructure"** input box
+   - Click **- Select -** on the **"Specify Infrastructure"** input box
 
--  From the dropdown select GKE
+   -  From the dropdown select GKE
 
+   | Input | Value | Notes |
+   | ----- | ----- | ----- |
+   | Name | GKE | |
 
+   - Click **Continue** 
 
-| Input | Value | Notes |
-| ----- | ----- | ----- |
-| Name  |GKE|       |
+   ### Execution Strategies
 
-- Click **Continue** 
-
-**Execution Strategies**
-
-- Select **Rolling** and click on **Use Strategy**, the frontend is a static application so no need to do canary.
-
+   Select **Rolling** and click on **Use Strategy**, the frontend is a static application so no need to do canary.
 
 # Lab 4 - Continuous Deploy - Backend
 
-### Summary: Extend your existing pipeline to derisk production deployments
+## Summary
+Extend your existing pipeline to derisk production deployments
 
-**Learning Objective(s):**
+### Learning Objective(s):
 
-- Utilise complex deployment strategies to reduce blast radius of a release 
+- Utilise complex deployment strategies to reduce blast radius of a release
 
-**Steps**
+## Steps
 
-5. In the existing pipeline, add a Deployment stage by clicking **Add Stage** and select **Deploy** as the Stage Type
+1. In the existing pipeline, add a Deployment stage by clicking **Add Stage** and select **Deploy** as the Stage Type
 
-6. Enter the following values and click on **Set Up Stage**
+2. Enter the following values and click on **Set Up Stage**
 
    | Input | Value | Notes |
    | ----- | ----- | ----- |
    | Stage Name | backend | |
    | Deployment Type | Kubernetes | |
 
-7. Configure the **backend** Stage with the following\
-   **Service**
+3. Configure the **backend** Stage with the following
 
-- Click **- Select -**  on the **"Select Service"** input box and configure as follows:
+   ### Service
 
-   | Input | Value | Notes |
-   | ----- | ----- | ----- |
-   | Name | backend | |
+   - Click **- Select -**  on the **"Select Service"** input box and configure as follows:
 
-- Click **Apply Selected** and then click **Continue** to go to the **"Environment"** tab
+      | Input | Value | Notes |
+      | ----- | ----- | ----- |
+      | Name | backend | |
 
-**Environment**
+   - Click **Apply Selected** and then click **Continue** to go to the **"Environment"** tab
 
-The target infrastructure has been pre-created for us and we used it in the previous stage. To reuse the same environment
+   ### Environment
+   The target infrastructure has been pre-created for us and we used it in the previous stage. To reuse the same environment
 
-- Click **- Propagate Environment From**
+   - Click **- Propagate Environment From**
 
-- Select **Stage \[frontend]**
+   - Select **Stage [frontend]**
 
-- Click **Continue**
+   - Click **Continue**
 
-**Execution**
+   ### Execution
 
-- Select **Canary**  and click on **Use Strategy**
+   - Select **Canary** and click on **Use Strategy**
 
-- **After** the canary deployment and **before** the canary delete step add **Harness Approval** step according to the table  below
+   - **After** the canary deployment and **before** the canary delete step add **Harness Approval** step according to the table below
 
-| Input       | Value             | Notes |
-| ----------- | ----------------- | ----- |
-| Name        |Approval|       |
-| User Groups |All Project Users|     Select project to see the **"All Project Users"** option   |
+     | Input       | Value             | Notes |
+     | ----------- | ----------------- | ----- |
+     | Name        |Approval|       |
+     | User Groups |All Project Users|     Select project to see the **"All Project Users"** option   |
 - Click **Apply Changes**
 
-8. Click **Save** and then click **Run** to execute the pipeline with the following inputs. As a bonus, save your inputs as an Input Set before executing (see below)
+4. Click **Save** and then click **Run** to execute the pipeline with the following inputs. As a bonus, save your inputs as an Input Set before executing (see below)
 
 | Input       | Value | Notes       |
 | ----------- | ----- | ----------- |
 | Branch Name |main| Leave as is |
 
-9. While the canary deployment is ongoing and waiting **approval** navigate to the web page and see if you can spot the canary (use the check release button) 
+5. While the canary deployment is ongoing and waiting **approval** navigate to the web page and see if you can spot the canary (use the check release button) 
 
-| project                | domain        | suffix |
-| ---------------------- | ------------- | ------ |
-|http\://project_id|.cie-bootcamp|.co.uk|
+| Project | Domain | Suffix |
+| ------- | ------ | ------ |
+| http\://project_id | .cie-bootcamp | .co.uk |
 
 ![](https://lh7-us.googleusercontent.com/docsz/AD_4nXfmb1N3lAe0EOnEun9neU9y3ilqy3HbxfnWfUMzF3FsykslwgQfU_W4pE0wlt5kYSp6_mTs7cVP0anhJ7uvtsytal2qX3ZEq3vvOT3DOBUzE9SZ3rpwkAHP6e_ExdRbo5VmN2kpxdFlp6u8iGaKwhW_uyAohEmJurkjmEB2Ww?key=cRG2cvp_PHVW0KG2Gq6Y_A)
 
-10. Approve the canary deployment for the pipeline to complete
+6. Approve the canary deployment for the pipeline to complete
+
+# TODO: IaCM Lab
+## Summary
+### Learning Objective(s):
+# Steps
+
+# TODO: Multicloud Lab
+## Summary
+### Learning Objective(s):
+## Steps
+remember to include the creation of the infra scope override
+
+# TODO: SNOW Lab
+## Summary
+### Learning Objective(s):
+## Steps
 
 # Lab 5 - Chaos Engineering
 
+### Summary
+Fully integrated chaos experiments with the delivery process
 
-### Summary: Fully integrated chaos experiments with the delivery process
-
-**Learning Objective(s):**
+### Learning Objective(s):
 
 - Auto generate chaos experiments on deployed services
 - Build a chaos experiments using a base fault (out of 200 OOTB faults)
@@ -444,7 +460,10 @@ Observe the auto generated experiments and run the **web-backend experiment**
 
 # Lab 6 - Validate Release
 
-**Learning Objective(s):**
+### Summary
+Validate release using chaos engineering and continuous verification
+
+### Learning Objective(s):
 
 - Identify the difference in traffic between normal and canary instances of the application
 
@@ -482,9 +501,10 @@ Observe the auto generated experiments and run the **web-backend experiment**
 
 # Lab 7 - Governance/Policy as Code
 
-### Summary: Create and apply policies as code in order to enable governance and promote self-service. In Lab 2 we saw how a user is impacted by policies in place, now is the time to create such policies
+### Summary
+Create and apply policies as code in order to enable governance and promote self-service. In Lab 2 we saw how a user is impacted by policies in place, now is the time to create such policies
 
-**Learning Objective(s):**
+### Learning Objective(s):
 
 - Create a policy that evaluates when editing pipelines
 
@@ -542,6 +562,17 @@ Observe the auto generated experiments and run the **web-backend experiment**
 
 
 # Lab 8 - Governance/Policy as Code (Advanced)
+
+### Summary
+Create advanced policies to block critical CVEs and enforce security standards
+
+### Learning Objective(s):
+
+- Create policies that evaluate security vulnerabilities
+- Block deployments with critical CVEs
+- Integrate policy enforcement into pipelines
+
+**Steps**
 
 **Create a Policy to block critical CVEs**
 
