@@ -5,14 +5,14 @@ provider "kubernetes" {
 
 resource "kubernetes_namespace" "ns" {
   metadata {
-    name = "${var.name}"
+    name = "${var.namespace-name}"
   }
 }
 
-output "name" {
+output "namespace" {
   value = kubernetes_namespace.ns.metadata[0].name
 }
 
-variable "name" {
+variable "namespace-name" {
   type = string
 }
