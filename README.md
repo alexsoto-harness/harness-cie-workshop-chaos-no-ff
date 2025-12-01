@@ -1,4 +1,6 @@
-# Lab 1 - Build
+# Lab 1 - Build (Pre-Completed - Reference Only)
+
+> **Note:** This lab has been pre-completed for you. We will walk through the configuration during the workshop introduction, but you will not need to create these steps. This pipeline is already set up and ready to use in subsequent labs.
 
 ## Summary
 Setup a CI Pipeline, including running source code tests, building the executable, building and pushing the artifact to a remote repository
@@ -8,13 +10,13 @@ A Deployable artifact
 
 ### Learning Objective(s):
 
-- Configure a basic pipeline using Harness CI
+- Understand how to configure a basic pipeline using Harness CI
 
-- Build and Deploy an artifact to a remote repository using Harness CI
+- Review how to build and deploy an artifact to a remote repository using Harness CI
 
-- Run unit tests during the process to verify that the build is successful using Harness CI
+- Understand how unit tests are integrated into the build process using Harness CI
 
-## Steps
+## Reference Steps
 
 1. From the left hand menu, navigate to **Projects** → **Select the project available**
 
@@ -89,7 +91,9 @@ A Deployable artifact
      | ----- | ----- | ----- |
      | Branch Name | main | *This is prepopulated* |
 
-# Lab 2 - DevSecOps
+# Lab 2 - DevSecOps (Pre-Completed - Reference Only)
+
+> **Note:** This lab has been pre-completed for you. We will walk through the security scanning configuration during the workshop introduction, but you will not need to create these steps. The security scans are already integrated into your pipeline.
 
 ## Summary:
 Our security team has implemented orchestration of **Fortify** and **OWASP** scans for our code in a reusable form **(templates)**. In order to improve our security posture they have also added policies to enforce us to include those templates
@@ -98,13 +102,13 @@ Our security team has implemented orchestration of **Fortify** and **OWASP** sca
 
 - Understand how governance plays a role in the path to production
 
-- Reusable templates make developer’s life easier
+- See how reusable templates make developer's life easier
 
-- DevSecOps practices can be easily achieved
+- Understand how DevSecOps practices can be easily achieved
 
 ![](https://lh7-us.googleusercontent.com/docsz/AD_4nXcLr5TGcKRWOjVgB_sCAHHEeLPyd6EBdnkt2-mq_imTkZbQMEwJD03Q1wZyhWqHxoCNIIYWJWlRbnZrvZn2pPYIwTzXlOGdhMDEgn-J2JnK7lVastmfpdwTqDHXjpP0DK3TgU1gM-Ec_0iZLicWV7KpgW2FdXUCcAtraDGaEz8hI3dpWGLXkg?key=cRG2cvp_PHVW0KG2Gq6Y_A)
 
-## Steps
+## Reference Steps
 
 1. In the existing pipeline, within the Build stage **before** PushToDockerhub step click on the plus icon to add a new step
 
