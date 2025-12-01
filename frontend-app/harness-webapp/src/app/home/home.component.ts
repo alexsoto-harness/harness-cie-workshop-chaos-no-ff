@@ -33,12 +33,27 @@ export class HomeComponent {
 
 
   refreshExecutionDetails(){
+    console.log('Calling refreshExecutionDetails...');
     this.apiService.getDetails()
-    .subscribe((data) => {
-      this.serviceName = data.service_name
-      this.lastExecution = data.last_execution_id
-      this.applicationVersion = data.application_version
-      this.deploymentType = data.deployment_type
+    .subscribe({
+      next: (data) => {
+        console.log('Received execution details:', data);
+        this.serviceName = data.service_name
+        this.lastExecution = data.last_execution_id
+        this.applicationVersion = data.application_version
+        this.deploymentType = data.deployment_type
+        
+        // Check if deployment type is canary and update the flag
+        if (data.deployment_type == 'canary'){
+          this.isCanary = true;
+        }
+        else{
+          this.isCanary = false;
+        }
+      },
+      error: (error) => {
+        console.error('Error fetching execution details:', error);
+      }
     });
 
   }
@@ -66,18 +81,8 @@ export class HomeComponent {
 
   
   checkRelase(){
-    const isCanary=false;
-    this.apiService.checkRelease()
-    .subscribe((data) => {
-      if (data.deployment_type == 'canary'){
-       this.isCanary= true;
-
-      }
-      else{
-        this.isCanary= false;
-      }
-
-    });
+    // Simply refresh execution details which will also update the canary flag
+    this.refreshExecutionDetails();
   }
 
 

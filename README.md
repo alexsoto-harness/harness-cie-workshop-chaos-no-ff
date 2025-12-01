@@ -284,7 +284,7 @@ Extend your existing pipeline to derisk production deployments
 # TODO: IaCM Lab
 ## Summary
 ### Learning Objective(s):
-# Steps
+## Steps
 
 # TODO: Multicloud Lab
 ## Summary
@@ -297,128 +297,19 @@ remember to include the creation of the infra scope override
 ### Learning Objective(s):
 ## Steps
 
-# Lab 5 - Chaos Engineering
+# Lab 5 - Continuous Verification
 
-### Summary
-Fully integrated chaos experiments with the delivery process
+## Summary
+Increase resiliency of applications by embedding chaos experiments into the delivery process and integrating with observability tools through continuous verification
 
 ### Learning Objective(s):
-
-- Auto generate chaos experiments on deployed services
-- Build a chaos experiments using a base fault (out of 200 OOTB faults)
-- Embed chaos engineering experiments into the deployment process
+- Embed chaos experiments into deployment pipelines to validate canary releases
 - Add continuous verification to the deployed service
 - Automate release validation
 
-**Steps**
-
-1. From the module selection menu select chaos engineering
-
-   ![Screenshot 2024-11-28 at 14 07 39](https://github.com/user-attachments/assets/5c520265-658f-4953-a95c-7a5c3c57ecdf)
-
-4. From the left hand menu, go to **Project Settings**
-5. From the available tiles select “Discovery”
-6. After expanding the side menu of the “DA-K8s” agent click on “Discover Now”
-
-  ![image](https://github.com/user-attachments/assets/be1a029d-9b4e-4971-9519-f284ba75c815)
-
-
-
-**Create Application Map**
-
-1. After discovery is complete double click on the agent “DA-K8s”
-
-   ![image](https://github.com/user-attachments/assets/3094b76d-1d27-429d-ab67-0fdb8e978894)
-
-
-1. Select the "Application Maps" tab
-2. Click on **Create New Application Map** and enter the following values
-
-   | Input | Value |
-   | ----- | ----- |
-   | Name | workshop-am |
-
-4. Select the relevant services for your project name "use the search function to find the services"
-5. Click Save
-
-
-**Auto Generate Chaos Experiments**
-1. From left handside menu select **Resilience Management**
-2. Drill down to the previously created application map
-3. Navigate to **Chaos Experiments**
-4. Select **Only a few**
-
-Observe the auto generated experiments and run the **web-backend experiment**
-
----------------
-
-**Create Experiments manually**
-
-1. From the left hand menu, go to **Chaos Experiments**
-2. Select **+New Experiment**
-
-   | Input | Value |
-   | ----- | ----- |
-   | Name | pod-memory |
-
-3. Select **Harness Infra**
-
-  ![Screenshot 2024-11-28 at 14 24 21](https://github.com/user-attachments/assets/c47834a3-fe88-44ed-be7e-7cee97bcb303)
-
-  - Click on **"Select a chaos Infrastructure"**
-
- 
-4. On the popup window select the available options
-
-   | Input | Value |
-   | ----- | ----- |
-   | Select Environment | prod |
-   | Select Infrastructure | GKE |
-
-5. Click on next to navigate to the experiment builder
-6. Click on **Add Fault**
-7. From the list of available faults select **Pod Memory Hog**
-8. From the navigation bar select **Target Application**
-
-| Input                        | Value | Notes |
-| ---------------------------- | ------ | -------|
-| Target Workload Kind|deployment||
-| Target Workload Namespace ||**Select the namespace available from the dropdown**|
-| Target Workload Names | Pick the backend deployment name|We will change that later |
-|Target Workload Labels | leave empty||
-
-
-| Input       | Value | Notes       |
-| ----------- | ----- | ----------- |
-| Select App Kind |deployment| Leave as is |
-| Namespace |**select from the dropdown** | |
-| Target Workload Labels| leave empty | |
-| Name |**select the backend service from the dropdown**| We will change that later |
-
-9. From the navigation bar select **Tune Fault**
-
-   | Input | Value |
-   | ----- | ----- |
-   | Total Chaos Duration | 600 |
-   | Memory Consumption | 300 |
-   | Number of workers | 1 |
-   | Pod affected percentage | 100 |
-
-10. Click on **Apply Changes** and then **Save**
-
-**Change target service to canary using YAML**
-
-1. From the pipeline visual editor switch to yaml
-2. Click the edit button to go into edit mode
-3. Locate the service name (set on previous state) **TARGET_WORKLOAD_NAMES**
-4. Replace it with **backend-<project_name>-deployment-canary** where project_name is the harness project. Summary: add the suffic **-canary** to the target workload
-5. Save the experiment
-
-
-**Embed chaos experiments into CD pipelines**
+## Steps
 
 1. From the module selection menu select Continuous Delivery & GitOps
-
 
    ![Screenshot 2024-11-28 at 14 07 22](https://github.com/user-attachments/assets/898ee27b-7369-47c6-a145-e74b49bb4bed)
 
@@ -433,11 +324,10 @@ Observe the auto generated experiments and run the **web-backend experiment**
    | ----- | ----- | ----- |
    | Name | Verify | |
    | Continuous Verification Type | Canary | |
-   | Sensitivity | Low | *This is to define how sensitive the ML algorithms are going to be on deviation from the baseline* |
-   | Duration | 10mins | |
+   | Sensitivity | High | *This is to define how sensitive the ML algorithms are going to be on deviation from the baseline* |
+   | Duration | 5mins | |
 
 5. Under the verify step click on the plus icon to add a new step in parallel
-
 
    ![Screenshot 2024-11-28 at 14 28 38](https://github.com/user-attachments/assets/368ba808-d303-43f8-8824-5d2e09367b01)
 
@@ -447,40 +337,50 @@ Observe the auto generated experiments and run the **web-backend experiment**
    | Input | Value |
    | ----- | ----- |
    | Name | Chaos |
-   | Select Chaos Experiment | pod-memory |
+   | Select Chaos Experiment | <project_name>-pod-memory |
    | Expected Resilience Score | 50 | 
 
 7. Click on Apply Changes
 
-8. Click **Save** and then click **Run** to execute the pipeline with the following inputs. As a bonus, save your inputs as an Input Set before executing (see below)
+8. Click **Save**
+
+# Lab 6 - Release Validation & Automatic Rollback
+
+## Summary
+Validate release using Continuous Verification
+
+### Learning Objective(s):
+- Use complex deployment strategies to reduce the blast radius
+- Add continuous verification to the deployed service
+- Automate release validation
+- Rollback unstable releases
+
+### Outcomes
+- Force failure of continuous delivery validation using chaos engineering
+
+## Steps
+
+-----------
+1. **TODO** write the steps to update the backend service to "backend-v2"
+-----------
+
+2. Click **Run** to execute the pipeline with the following inputs. As a bonus, save your inputs as an Input Set before executing (see below)
 
    | Input | Value | Notes |
    | ----- | ----- | ----- |
    | Branch Name | main | *Leave as is* |
 
-# Lab 6 - Validate Release
+3. While the canary deployment is ongoing navigate to the web page and see if you can spot the canary (use the check release button) 
 
-### Summary
-Validate release using chaos engineering and continuous verification
+   | project                | domain        | suffix |
+   | ---------------------- | ------------- | ------ |
+   | http\://\<project\_id> | .cie-bootcamp | .co.uk |
 
-### Learning Objective(s):
+- Validate that we've deployed the new version in the canary by checking the version is **backend-v2** and the Last Execution matches the **build Id** of your pipeline
 
-- Identify the difference in traffic between normal and canary instances of the application
-
-- Automate release validation
-
-- Use complex deployment strategies to reduce the blast radius
-
-**Outcomes**
-- Force failure of continuous delivery validation using chaos engineering
-
-**Steps**:
-
-- While the canary deployment is ongoing navigate to the web page and see if you can spot the canary (use the check release button) 
-
-| project                | domain        | suffix |
-| ---------------------- | ------------- | ------ |
-| http\://\<project\_id>|.cie-bootcamp|.co.uk|
+------
+**TODO** insert screenshot of canary with v2 and where to find the build Id
+------
 
 - Drill down to the distribution test tab and run the traffic generation by clicking the **Start** button
 
@@ -488,8 +388,6 @@ Validate release using chaos engineering and continuous verification
 
 - Validate the outcome of the verification on the pipeline execution details
 
-
-\
 ![](https://lh7-us.googleusercontent.com/docsz/AD_4nXdbAmEJ5zQPsKlw_nEknWvYo97pm5eWCXr6vU8-GgIL0ulAOSH9N07PoEcVSknARVQo7Tgj1s31VHqR1I3hu2dMIO1rIX5HHcmTPXoQPoyo8CPv13OhnJN5WVcZqSwUXzdDHmm3PxUnhtpGVl0PAMJ_1wnuodvUbVPBOdnGKQ?key=cRG2cvp_PHVW0KG2Gq6Y_A)
 ![](https://lh7-us.googleusercontent.com/docsz/AD_4nXf-5oWX9OfvdmEb9MBm2_h2KKAa_QwmiJoM0fiKrTuxAr6GR4wxeulSlk48gyBK3dykrtIslDSkxpiGytrxH0JaxaQ4ZgTYxbmc8OenAH3nhGCvvOAxkWVjVBp1TRg_qQQi9z8OrNPK4udPtNL1LIyym6Ch5IMzrulFOcXhOQ?key=cRG2cvp_PHVW0KG2Gq6Y_A)
 
