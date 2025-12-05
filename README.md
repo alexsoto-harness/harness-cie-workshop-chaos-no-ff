@@ -155,7 +155,12 @@ Extend your existing pipeline to take the artifact built in the CI/Build stage a
 
 ## Steps
 
+![Select the pencil icon at the top right to edit the pipeline](images/lab3-edit-mode.png "Pipeline Edit Mode")
+> If you are in execution view, select the pencil icon at the top right to edit the pipeline
+
 1. In the existing pipeline, add a Deployment stage by clicking **Add Stage** and select **Deploy** as the Stage Type
+
+![Click on the plus icon to add a new stage](images/lab3-add-stage.png "Add Stage")
 
 2. Enter the following values and click on **Set Up Stage**
 
