@@ -320,15 +320,17 @@ Our SRE team wants to increase resiliency by adopting multi-cloud deployments. A
 
 1. From the left navigation bar, expand **Infrastructure** and click on **Workspaces**
 
-2. Click on **Start with Template** and name it `{project-id}-workspace`
+2. Click on **Start with Template** and name it `{project-id}_workspace`
 
 3. Select the **IaCM Workspace Template** and click **Use Template**
 
-4. Click on the **Configuration** section. Review the pre-created workspace settings—our provisioner and repo containing the Terraform code has already been configured for us.
+4. Click on the **Configuration** section. Review the pre-created workspace settings - our provisioner and repo containing the Terraform code has already been configured for us.
 
-5. Now click on **Connectors and Variables**. The name for the target namespace we will deploy to has been prepopulated with a default value.
+5. Now click on **Connectors and Variables**. The name for the target namespace we will deploy to has been prepopulated with a default value for your convenience.
 
 > **Note:** Any and all of these settings can be made editable by the template owners, giving flexibility where needed and standardization where warranted.
+
+![IaCM Workspace Creation](images/lab5-iac.gif "IaCM Workspace Creation")
 
 ### IaC Orchestration in the Pipeline
 
@@ -336,13 +338,15 @@ Our SRE team wants to increase resiliency by adopting multi-cloud deployments. A
 
 2. Before our frontend deployment stage, add an **Infrastructure** stage, name it `Create K8s Namespace`, and click **Set Up Stage**.
 
-3. Click **Next** on the Infrastructure section—**Cloud** should already be selected for you.
+3. Click **Next** on the Infrastructure section - **Cloud** should already be selected for you.
 
-4. Select the workspace you just created: `{project-id}-workspace`
+4. Select the workspace you just created: `{project-id}_workspace`
 
 5. Ensure the Provisioner is set to **OpenTofu** and the Operation is **Provision**, then click **Use Strategy**.
 
 6. Between the **plan** and **apply** steps, click the plus button and add an **IaCM Approval** step. Name it `IaCM Approval` and check the box for **Auto approve when the plan does not change**, then click **Apply Changes** at the top right.
+
+![Add IaCM to the Pipeline](/images/lab5-iacm-stage.gif "Add IaCM to the Pipeline")
 
 ### Multi-Environment Deployment
 
@@ -353,6 +357,8 @@ Our SRE team wants to increase resiliency by adopting multi-cloud deployments. A
 3. On the **Infrastructures** section, click on the box **Specify Infrastructures** and select `EKS`. Click **Apply Selected**.
 
 4. Save the pipeline.
+
+![Multi-Environment Deployment](images/lab5-multi-env.gif "Multi-Environment Deployment")
 
 ### Environment Overrides
 
@@ -383,20 +389,16 @@ Our SRE team wants to increase resiliency by adopting multi-cloud deployments. A
 
 4. Click **Submit** and then on the checkmark on the right to apply changes.
 
-> **Bonus:** Repeat for the backend service and edit the backend stage to also include EKS as a deployment target.
+![Environment Overrides](images/lab5-override.gif "Environment Overrides")
 
-# TODO: Multicloud Lab
-## Summary
-### Learning Objective(s):
-## Steps
-remember to include the creation of the infra scope override
+> **Bonus:** Repeat for the backend service and edit the backend stage to also include the EKS environment as a deployment target.
 
-# TODO: SNOW Lab
+# TODO Lab 6: SNOW Lab
 ## Summary
 ### Learning Objective(s):
 ## Steps
 
-# Lab 5 - Continuous Verification
+# Lab 7 - Continuous Verification
 
 ## Summary
 Increase resiliency of applications by embedding chaos experiments into the delivery process and integrating with observability tools through continuous verification
@@ -443,7 +445,7 @@ Increase resiliency of applications by embedding chaos experiments into the deli
 
 8. Click **Save**
 
-# Lab 6 - Release Validation & Automatic Rollback
+# Lab 8 - Release Validation & Automatic Rollback
 
 ## Summary
 Validate release using Continuous Verification
@@ -496,7 +498,7 @@ Validate release using Continuous Verification
 - Add a canary rollout from 10% to 50% traffic and see how this impacts the traffic distribution
 
 
-# Lab 7 - Governance/Policy as Code
+# Lab 9 - Governance/Policy as Code
 
 ### Summary
 Create and apply policies as code in order to enable governance and promote self-service. In Lab 2 we saw how a user is impacted by policies in place, now is the time to create such policies
@@ -558,7 +560,7 @@ Create and apply policies as code in order to enable governance and promote self
 9. Click **Save** and note that the save succeeds without any policy failure
 
 
-# Lab 8 - Governance/Policy as Code (Advanced)
+# Lab 10 - Governance/Policy as Code (Advanced)
 
 ### Summary
 Create advanced policies to block critical CVEs and enforce security standards
