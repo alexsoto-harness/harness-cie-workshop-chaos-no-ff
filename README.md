@@ -136,22 +136,20 @@ Our security team has implemented orchestration of **Fortify** and **OWASP** sca
 
 After the **Build and Push** stage is complete, go to the **Security Tests** tab to see the deduplicated, normalized and prioritized list of vulnerabilities discovered across your scanners.
 
-# Lab 3 - Continuous Deploy - Frontend
+# Lab 3 - Continuous Deployment - Frontend
 
 ## Summary: 
-Extend your existing pipeline to take the artifact built in the CI/Build stage and deploy it to an environment
+Our artifact is built, scanned, and sitting in DockerHub. Time to deploy it. Extend the pipeline to ship the frontend to a GKE cluster using a rolling deployment. The manifests are ready, no manual kubectl commands, no deployment scripts to maintain, just point Harness at your manifests and let it handle the rest
 
 ### Learning Objective(s):
 
-- Add a second stage to an existing pipeline
+- Extend CI pipelines with Continuous Deployment stages
 
-- Create a k8s service
+- Define Kubernetes services with manifests and artifact sources
 
-- Incorporate an advanced deployment strategy such as Canary
+- Use Harness expressions for dynamic artifact tagging
 
-- Create custom Harness variables
-
-- Create an Input Set
+- Implement rolling deployment strategies
 
 ## Steps
 
@@ -227,14 +225,16 @@ Extend your existing pipeline to take the artifact built in the CI/Build stage a
 
    Select **Rolling** and click on **Use Strategy**, the frontend is a static application so no need to do canary.
 
-# Lab 4 - Continuous Deploy - Backend
+# Lab 4 - Continuous Deployment - Backend
 
 ## Summary
-Extend your existing pipeline to derisk production deployments
+Frontend deployed. Now for the backend, where things can actually break in expensive ways. Let's use a canary deployment with manual approval to minimize blast radius. Deploy to a small slice of traffic, verify the canary is healthy, then promote to everyone. Progressive delivery made easy. 
 
 ### Learning Objective(s):
 
-- Utilise complex deployment strategies to reduce blast radius of a release
+- Propagate and reuse environments across multiple deployment stages
+- Implement advanced deployment strategies to reduce blast radius of a release
+- Add manual approval gates and keep the human in the loop for controlled production releases
 
 ## Steps
 
@@ -289,7 +289,7 @@ Extend your existing pipeline to derisk production deployments
    | ----------- | ----- | ----------- |
    | Branch Name |main| Leave as is |
 
-5. While the canary deployment is ongoing and waiting **approval** navigate to the web page and see if you can spot the canary (use the check release button) 
+5. While the canary deployment is ongoing and waiting **approval** navigate to the web page and see if you can spot Captain Canary (use the Check Release button to refresh) 
 
    | Project | Domain | Suffix |
    | ------- | ------ | ------ |
@@ -297,9 +297,9 @@ Extend your existing pipeline to derisk production deployments
 
 ![Canary Deployment](images/canary.png "I see the canary!")
 
-6. Approve the canary deployment for the pipeline to complete
+6. Approve the canary deployment for the pipeline to complete and go back to the web page and you should see Captain Canary has left as his work here is done.
 
-# Lab 5: Multicloud Deployments
+# Lab 5 - Multicloud Deployments
 
 ## Summary
 Our SRE team wants to increase resiliency by adopting multi-cloud deployments. AWS EKS joins our GCP GKE deployment. Twice the clouds, twice the resilience, same amount of effort. (That last part is actually true.) The platform team has already created the EKS cluster for us, but we need to create a new namespace for our application.
@@ -393,10 +393,85 @@ Our SRE team wants to increase resiliency by adopting multi-cloud deployments. A
 
 > **Bonus:** Repeat for the backend service and edit the backend stage to also include the EKS environment as a deployment target.
 
-# TODO Lab 6: SNOW Lab
+# Lab 6 - Policy, Governance & Change Management
+
 ## Summary
+You've built a pipeline that deploys across multiple clouds. Now the compliance team wants a word. In regulated environments, you can't just ship code to production without an audit trail and proper approvals. In this lab, we'll enforce governance with Policy-as-Code, ensuring every pipeline has an approval gate, and integrating with ServiceNow for change management. Compliance as code, not compliance as bottleneck.
+
 ### Learning Objective(s):
+
+- Enforce governance guardrails using Policy as Code (OPA)
+- Integrate ServiceNow for automated change request creation and approval
+- Understand how policies prevent non-compliant pipelines from being executed, or even saved.
+
 ## Steps
+
+### Policy as Code
+
+![Policy as Code](images/lab6-opa.gif "Policy as Code")
+
+1. At the bottom of the left navigation bar hover over **Project Settings** and select **Policies** from the expanded menu
+
+2. At the top right click on **Policies** and select **Approval Required Policy**
+
+3. Click on the **Select Input** button on the right and select these values from each dropdown:
+
+   | Input | Value |
+   | ----- | ----- |
+   | Entity Type | Pipeline |
+   | Organization | {your-org} |
+   | Project | {your-project} |
+   | Action | On Save |
+
+4. Select your most recent pipeline save and click **Apply**
+
+5. Now click on the green **Test** button on the right. What do you think will happen?
+
+> **Note:** Since the policy checks that we have an approval before any deployment stage, it's expected that it failed. Failure is success! The policy is working as designed.
+
+6. Let's now enforce it. Click on **Policy Sets** from the top right
+
+7. Click on the **Enforced** toggle to turn it on
+
+### Governance in Action
+
+![Policy Violation](images/lab6-policy-violation.gif "Policy Violation")
+
+1. Head back over to our pipeline by selecting **Pipelines** from the left navigation menu
+
+2. Let's make a small edit to our pipeline so we can save it. Click on the pencil icon next to the pipeline name
+
+3. Now click on the pencil icon next to the **Tags** section and add a tag. You can get creative here :)
+
+4. Click **Continue** then **Save** your pipeline
+
+> **Note:** As we expected, we are not allowed to save our pipeline until we've added an Approval. Let's fix it!
+
+### Approvals via ServiceNow Change Requests
+
+![ServiceNow Approval](images/lab6-add-approval.gif "ServiceNow Approval")
+
+1. Hover before the **frontend** stage and click on the **+** icon that appears to add a new stage
+
+2. Click **Use Template**
+
+3. Select the **SNOW Approval** template and click on **Use Template**
+
+4. Name it `ServiceNow Approval` and click **Set Up Stage**
+
+> **Note:** Make sure you name it `ServiceNow Approval` as we will add steps later that reference this stage.
+
+5. This template has been preconfigured for us, so there are no inputs necessary
+
+6. Click on the **Overview** toggle to see the steps in this template
+
+7. Click on the **Create Ticket** or **Approval** steps to see how they are configured. Click the **X** or **Discard** once you're done reviewing
+
+> **Note:** Notice the use of Harness Expressions to dynamically populate our tickets and approvals.
+
+8. Save the pipeline. No violations this time, hooray for compliance!
+
+> **Bonus:** Add a step to update the ServiceNow ticket after the last step of the **backend** stage, indicating that we've successfully deployed to production. *Hint: there's a template already created.*
 
 # Lab 7 - Continuous Verification
 
@@ -497,70 +572,7 @@ Validate release using Continuous Verification
 
 - Add a canary rollout from 10% to 50% traffic and see how this impacts the traffic distribution
 
-
-# Lab 9 - Governance/Policy as Code
-
-### Summary
-Create and apply policies as code in order to enable governance and promote self-service. In Lab 2 we saw how a user is impacted by policies in place, now is the time to create such policies
-
-### Learning Objective(s):
-
-- Create a policy that evaluates when editing pipelines
-
-- Create a policy that evaluates during pipeline execution
-
-- Test policy enforcement
-
-**Steps\
-****Create a Policy to require Approvals**
-
-1. From the secondary menu, select **Project Settings** and select **Governance Policies**
-
-2. Click **Build a Sample Policy**
-
-3. From the suggested list select **Pipeline - Approval**  and click on next
-
-4. Click Next: Enforce Policy
-
-5. Set the values according to the table  below and confirm
-
-| Input            | Value        | Notes |
-| ---------------- | ------------ | ----- |
-| Trigger Event    |On Run|       |
-| Failure Strategy |Error & exit|       |
-
-**Test the Policy to require Approvals**
-
-1. Open your pipeline
-
-2. Try to run the pipeline and note that the failure due to lack of an approval stage
-
-3. Click **Save** and note that the failure due to lack of an approval stage
-
-4. Open the pipeline in edit mode and navigate to the “**frontend**” stage
-
-5. Before the rolling deployment step add **Harness Approval** step according to the table  below
-
-| Input            | Value            | Notes |
-| ---------------- | ---------------- | ----- |
-| Step Name        |Approval|       |
-| Type of Approval |Harness Approval|       |
-
-6. Configure the Approval step as follows
-
-   | Input | Value | Notes |
-   | ----- | ----- | ----- |
-   | Name | Approval | |
-   | User Groups | All Project Users | |
-
-7. In a similar way as before navigate to the “**backend**” stage
-
-8. Before the canary deployment block add **Harness Approval**
-
-9. Click **Save** and note that the save succeeds without any policy failure
-
-
-# Lab 10 - Governance/Policy as Code (Advanced)
+# Lab 9 - Governance/Policy as Code (Advanced)
 
 ### Summary
 Create advanced policies to block critical CVEs and enforce security standards
