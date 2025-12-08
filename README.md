@@ -1,4 +1,19 @@
-# Lab 1 - Build (Pre-Completed - Reference Only)
+## Table of Contents
+
+- [Lab 1 - Build (Skip this)](#lab-1)
+- [Lab 2 - DevSecOps (Skip this)](#lab-2)
+- [Lab 3 - Continuous Deployment - Frontend (Start here)](#lab-3)
+- [Lab 4 - Continuous Deployment - Backend](#lab-4)
+- [Lab 5 - Multicloud Deployments](#lab-5)
+- [Lab 6 - Policy, Governance & Change Management](#lab-6)
+- [Lab 7 - Continuous Verification](#lab-7)
+- [Lab 8 - Release Validation & Automatic Rollback](#lab-8)
+- [Lab 9 - Governance/Policy as Code (Advanced)](#lab-9)
+
+<details>
+  <summary><strong>Lab 1 - Build (Skip This Lab - Reference Only)</strong></summary>
+<a id="lab-1"></a>
+<br>
 
 > **Note:** This lab has been pre-completed for you. We will walk through the configuration during the workshop introduction, but you will not need to create these steps. This pipeline is already set up and ready to use in subsequent labs.
 
@@ -42,13 +57,14 @@ A Deployable artifact
     | Repository Name | harnessrepo | *This is the name of the repository* |
 
 6. There are **two** main tabs that need configuration:
-    ### Infrastructure
+
+   ### Infrastructure
 
    | Input | Value | Notes |
    | ----  | ----- | ----- |
    | Infrastructure | Cloud | *Harness Cloud provides managed build infrastructure on demand* |
 
-    ### Execution
+   ### Execution
 
    - Select **Add Step**, then **Add Step** again, then select **Test Intelligence** from the Step Library and configure with the following
 
@@ -85,13 +101,21 @@ A Deployable artifact
 
    - Click **Apply Changes** to close the config dialog
 
-  7. Click **Save** and then click **Run** to execute the pipeline with the following inputs
+7. Click **Save** and then click **Run** to execute the pipeline with the following inputs
 
-     | Input | Value | Notes |
-     | ----- | ----- | ----- |
-     | Branch Name | main | *This is prepopulated* |
+   | Input | Value | Notes |
+   | ----- | ----- | ----- |
+   | Branch Name | main | *This is prepopulated* |
 
-# Lab 2 - DevSecOps (Pre-Completed - Reference Only)
+</details>
+
+---
+
+<details>
+  <summary><strong>Lab 2 - DevSecOps (Skip This Lab - Reference Only)</strong></summary>
+
+<a id="lab-2"></a>
+<br>
 
 > **Note:** This lab has been pre-completed for you. We will walk through the security scanning configuration during the workshop introduction, but you will not need to create these steps. The security scans are already integrated into your pipeline.
 
@@ -116,7 +140,7 @@ Our security team has implemented orchestration of **Fortify** and **OWASP** sca
 
    ![](https://lh7-us.googleusercontent.com/docsz/AD_4nXeC5rTVxlk7DeZeU_cINwcKo6Nf2wVW9brQ9MiCEfppJwmU-uH3QcNZ53qTxhur57KeySksoDBg9EqjhgKOgAEDKon6iNz9cFxozBe9VZssV-t77VNo6t1zPUvm6e2NOZJDKncxd9c2GM4HE-h-L4cIOl4u6Uqx_azoKchMdg?key=cRG2cvp_PHVW0KG2Gq6Y_A)
 
-3. Select **DevX Fortify Scan** 
+3. Select **DevX Fortify Scan** 
 
 4. Name the step **Fortify**
 
@@ -136,7 +160,11 @@ Our security team has implemented orchestration of **Fortify** and **OWASP** sca
 
 After the **Build and Push** stage is complete, go to the **Security Tests** tab to see the deduplicated, normalized and prioritized list of vulnerabilities discovered across your scanners.
 
-# Lab 3 - Continuous Deployment - Frontend
+</details>
+
+---
+
+# Lab 3 - Continuous Deployment - Frontend <a id="lab-3"></a>
 
 ## Summary: 
 Our artifact is built, scanned, and sitting in DockerHub. Time to deploy it. Extend the pipeline to ship the frontend to a GKE cluster using a rolling deployment. The manifests are ready, no manual kubectl commands, no deployment scripts to maintain, just point Harness at your manifests and let it handle the rest
@@ -225,7 +253,8 @@ Our artifact is built, scanned, and sitting in DockerHub. Time to deploy it. Ext
 
    Select **Rolling** and click on **Use Strategy**, the frontend is a static application so no need to do canary.
 
-# Lab 4 - Continuous Deployment - Backend
+---
+# Lab 4 - Continuous Deployment - Backend <a id="lab-4"></a>
 
 ## Summary
 Frontend deployed. Now for the backend, where things can actually break in expensive ways. Let's use a canary deployment with manual approval to minimize blast radius. Deploy to a small slice of traffic, verify the canary is healthy, then promote to everyone. Progressive delivery made easy. 
@@ -262,11 +291,21 @@ Frontend deployed. Now for the backend, where things can actually break in expen
 ![Canary Deployment](images/lab4-canary.gif "Canary Deployment")
 
    ### Environment
-   The target infrastructure has been pre-created for us and we used it in the previous stage. To reuse the same environment
+   - Click **- Select -** on the **"Specify Environment"** input box
 
-   - Click **- Propagate Environment From**
+   - Select **prod** environment and click **"Apply Selected"**
 
-   - Select **Stage [frontend]**
+   | Input | Value | Notes |
+   | ----- | ----- | ----- |
+   | Name | prod | *Make sure to select the environment and infrastructure definition* |
+
+   - Click **- Select -** on the **"Specify Infrastructure"** input box
+
+   -  From the dropdown select GKE
+
+   | Input | Value | Notes |
+   | ----- | ----- | ----- |
+   | Name | GKE | |
 
    - Click **Continue**
 
@@ -280,6 +319,7 @@ Frontend deployed. Now for the backend, where things can actually break in expen
      | ----------- | ----------------- | ----- |
      | Name        |Approval|       |
      | User Groups |All Project Users|     Select project to see the **"All Project Users"** option   |
+![Canaru Approval](images/harness-approval.png "Approve the Canary Deployment")
 
 - Click **Apply Changes**
 
@@ -299,7 +339,7 @@ Frontend deployed. Now for the backend, where things can actually break in expen
 
 6. Approve the canary deployment for the pipeline to complete and go back to the web page and you should see Captain Canary has left as his work here is done.
 
-# Lab 5 - Multicloud Deployments
+# Lab 5 - Multicloud Deployments <a id="lab-5"></a>
 
 ## Summary
 Our SRE team wants to increase resiliency by adopting multi-cloud deployments. AWS EKS joins our GCP GKE deployment. Twice the clouds, twice the resilience, same amount of effort. (That last part is actually true.) The platform team has already created the EKS cluster for us, but we need to create a new namespace for our application.
@@ -318,13 +358,13 @@ Our SRE team wants to increase resiliency by adopting multi-cloud deployments. A
 
 ### Infrastructure as Code Management
 
-1. From the left navigation bar, expand **Infrastructure** and click on **Workspaces**
+1. From the Unified View in the left navigation bar, expand **Infrastructure** and click on **Workspaces**
 
-2. Click on **Start with Template** and name it `{project-id}_workspace`
+2. In the Getting Started pane on the right, click on **Start with Template** and name it `{project-id}_workspace`
 
 3. Select the **IaCM Workspace Template** and click **Use Template**
 
-4. Click on the **Configuration** section. Review the pre-created workspace settings - our provisioner and repo containing the Terraform code has already been configured for us.
+4. Click on the **Configuration** tab along the top of the Workspace dashboard. Review the pre-created workspace settings - our provisioner and repo containing the Terraform code has already been configured for us.
 
 5. Now click on **Connectors and Variables**. The name for the target namespace we will deploy to has been prepopulated with a default value for your convenience.
 
@@ -393,7 +433,9 @@ Our SRE team wants to increase resiliency by adopting multi-cloud deployments. A
 
 > **Bonus:** Repeat for the backend service and edit the backend stage to also include the EKS environment as a deployment target.
 
-# Lab 6 - Policy, Governance & Change Management
+5. Navigate back to your workshop pipeline under the Unified View in the left navbar. Click Run in the upper right corner of the Pipeline Studio.
+
+# Lab 6 - Policy, Governance & Change Management <a id="lab-6"></a>
 
 ## Summary
 You've built a pipeline that deploys across multiple clouds. Now the compliance team wants a word. In regulated environments, you can't just ship code to production without an audit trail and proper approvals. In this lab, we'll enforce governance with Policy-as-Code, ensuring every pipeline has an approval gate, and integrating with ServiceNow for change management. Compliance as code, not compliance as bottleneck.
@@ -473,7 +515,7 @@ You've built a pipeline that deploys across multiple clouds. Now the compliance 
 
 > **Bonus:** Add a step to update the ServiceNow ticket after the last step of the **backend** stage, indicating that we've successfully deployed to production. *Hint: there's a template already created.*
 
-# Lab 7 - Continuous Verification
+# Lab 7 - Continuous Verification <a id="lab-7"></a>
 
 ## Summary
 Increase resiliency of applications by embedding chaos experiments into the delivery process and integrating with observability tools through continuous verification
@@ -520,7 +562,7 @@ Increase resiliency of applications by embedding chaos experiments into the deli
 
 8. Click **Save**
 
-# Lab 8 - Release Validation & Automatic Rollback
+# Lab 8 - Release Validation & Automatic Rollback <a id="lab-8"></a>
 
 ## Summary
 Validate release using Continuous Verification
@@ -572,7 +614,7 @@ Validate release using Continuous Verification
 
 - Add a canary rollout from 10% to 50% traffic and see how this impacts the traffic distribution
 
-# Lab 9 - Governance/Policy as Code (Advanced)
+# Lab 9 - Governance/Policy as Code (Advanced) <a id="lab-9"></a>
 
 ### Summary
 Create advanced policies to block critical CVEs and enforce security standards
