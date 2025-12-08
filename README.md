@@ -261,7 +261,7 @@ Frontend deployed. Now for the backend, where things can actually break in expen
 
 ### Learning Objective(s):
 
-- Propagate and reuse environments across multiple deployment stages
+- Extend the pipeline with multiple deployment stages for different services
 - Implement advanced deployment strategies to reduce blast radius of a release
 - Add manual approval gates and keep the human in the loop for controlled production releases
 
@@ -315,11 +315,12 @@ Frontend deployed. Now for the backend, where things can actually break in expen
 
    - **After** the canary deployment and **before** the canary delete step add **Harness Approval** step according to the table below
 
-     | Input       | Value             | Notes |
-     | ----------- | ----------------- | ----- |
-     | Name        |Approval|       |
-     | User Groups |All Project Users|     Select project to see the **"All Project Users"** option   |
-![Canaru Approval](images/harness-approval.png "Approve the Canary Deployment")
+     | Input | Value | Notes |
+     | ----- | ----- | ----- |
+     | Name  | Approval | |
+     | User Groups | All Project Users | Select project to see the **"All Project Users"** option |
+
+![Canary Approval](images/harness-approval.png "Approve the Canary Deployment")
 
 - Click **Apply Changes**
 
