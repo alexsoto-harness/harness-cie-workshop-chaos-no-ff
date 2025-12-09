@@ -22,6 +22,7 @@ env:
     HARNESS_BUILD: <+pipeline.sequenceId>
     SERVICE_NAME: <+service.name>
     APPLICATION_VERSION: <+artifacts.primary.tag>
+    LAST_EXECUTION_ID: <+pipeline.sequenceId>
 
 # Default nodeSelector for GKE deployments
 nodeSelector:

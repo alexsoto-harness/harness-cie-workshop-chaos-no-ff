@@ -614,7 +614,7 @@ Validate release using Continuous Verification
 
 ![IaCM Approval](images/lab8-iacm-approval.gif "IaCM Approval")
 
-**3.** When the pipeline progresses after the IACM Approval, it will eventually pause again on the ServiceNow Approval stage. At this point, the orchestration pipeline automatically created the SNOW change record on behalf of you (the developer) and updated the ticket with the details needed for a release. No manual change records to maintain by the developer - everything is automated. Next,et's simulate a release manager signing off on the implementation.
+**3.** When the pipeline progresses after the IACM Approval, it will eventually pause again on the ServiceNow Approval stage. At this point, the orchestration pipeline automatically created the SNOW change record on behalf of you (the developer) and updated the ticket with the details needed for a release. No manual change records to maintain by the developer - everything is automated. Next, let's simulate a release manager signing off on the implementation.
 
 Click on the **ServiceNow Approval** stage, click on the **Approval** step, and click on the change record hyperlink in the step details on the right to open the change record in a new window.
 
@@ -646,8 +646,6 @@ Next, login to the SNOW sandbox instance with the name **workshopuser** and the 
 
 **Bonus**:
 - If the verification fails harness defaults to a manual intervention, you can now decide what you want to happen next (rollback, ignore etc.) 
-
-- Add a canary rollout from 10% to 50% traffic and see how this impacts the traffic distribution
 
 ---
 
