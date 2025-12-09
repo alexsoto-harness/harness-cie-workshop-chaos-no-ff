@@ -566,15 +566,22 @@ Canary deployments are great, but how do you know the canary is actually healthy
    | Select Chaos Experiment | <project_name>-pod-memory | _Select the existing experiment from the list_ |
    | Expected Resilience Score | 50 | _Should already be populated for you_ |
 
-**7.** Next to the Approval step, click the X to delete the step from the pipeline. We no longer need a manual approval since we just added automated deployment validation.
+**6.** Next to the Approval step, click the X to delete the step from the pipeline. We no longer need a manual approval since we just added automated deployment validation.
 
-**8.** Click on Apply Changes
+**7.** Click on Apply Changes
 
-**9.** Click **Save**
+**8.** Click **Save**
 
+![CV and Chaos](images/lab7-cv-chaos.gif "CV and Chaos")
 ---
 
 # Lab 8 - Release Validation & Automatic Rollback
+
+# **TODO** if you think it's appropriate, have them switch to the "Rollback" view and add a close SNOW ticket with Failure step (it's a template)
+
+![Rollback view](images/lab8-rollback-view.png "Rollback view")
+
+![Rollback studio](images/lab8-rollback-studio.gif "Rollback studio")
 
 ## Summary
 Validate release using Continuous Verification
