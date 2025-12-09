@@ -325,7 +325,10 @@ Frontend is done. Now for the backend, where things can actually break in expens
 
    | Input       | Value | Notes       |
    | ----------- | ----- | ----------- |
+   | backend_version | backend-v1 | Leave as is |
    | Branch Name |main| Leave as is |
+   | Stage: frontend | frontend | Leave as is |
+   | Stage: backend | backend | Leave as is |
 
 **5.** While the canary deployment is ongoing and waiting **approval** navigate to the web page and see if you can spot Captain Canary (use the Check Release button to refresh) 
 
@@ -336,6 +339,8 @@ Frontend is done. Now for the backend, where things can actually break in expens
 ![Canary Deployment](images/canary.png "I see the canary!")
 
 **6.** Approve the canary deployment for the pipeline to complete and go back to the web page and you should see Captain Canary has left as his work here is done.
+
+---
 
 # Lab 5 - Multicloud Deployments
 
@@ -431,7 +436,7 @@ Our SRE team wants to increase resiliency by adopting multi-cloud deployments. A
 
 > **Bonus:** Repeat for the backend service and edit the backend stage to also include the EKS environment as a deployment target.
 
-**5.** Navigate back to your workshop pipeline under the Unified View in the left navbar. Click Run in the upper right corner of the Pipeline Studio.
+---
 
 # Lab 6 - Policy, Governance & Change Management
 
@@ -513,6 +518,8 @@ You've built a pipeline that deploys across multiple clouds. Now the compliance 
 
 > **Bonus:** Add a step to update the ServiceNow ticket after the last step of the **backend** stage, indicating that we've successfully deployed to production. *Hint: there's a template already created.*
 
+---
+
 # Lab 7 - Continuous Verification
 
 ## Summary
@@ -556,9 +563,13 @@ Increase resiliency of applications by embedding chaos experiments into the deli
    | Select Chaos Experiment | <project_name>-pod-memory |
    | Expected Resilience Score | 50 | 
 
-**7.** Click on Apply Changes
+**7.** Next to the Approval step, click the X to delete the step from the pipeline. We no longer need a manual approval since we just added automated deployment validation.
 
-**8.** Click **Save**
+**8.** Click on Apply Changes
+
+**9.** Click **Save**
+
+---
 
 # Lab 8 - Release Validation & Automatic Rollback
 
@@ -577,16 +588,19 @@ Validate release using Continuous Verification
 ## Steps
 
 -----------
-**1.** **TODO** write the steps to update the backend service to "backend-v2"
------------
 
-**2.** Click **Run** to execute the pipeline with the following inputs. As a bonus, save your inputs as an Input Set before executing (see below)
+**1.** First, we need to deploy a new version of our backend to the canary environment so we can demonstrate how to rollback a failed release. Click the **Run** button in the upper right corner to execute the pipeline but this time, select the backend-v2 in the dropdown box that pops up.
 
    | Input | Value | Notes |
    | ----- | ----- | ----- |
-   | Branch Name | main | *Leave as is* |
+   | backend_version | backend-v2 | Leave as is |
+   | Branch Name | main | Leave as is |
+   | Stage: frontend | frontend | Leave as is |
+   | Stage: backend | backend | Leave as is |
 
-**3.** While the canary deployment is ongoing navigate to the web page and see if you can spot the canary (use the check release button) 
+![Screenshot](images/lab8-pick-v2.png)
+
+**2.** While the canary deployment is ongoing navigate to the web page and see if you can spot the canary (use the check release button) 
 
    | project                | domain        | suffix |
    | ---------------------- | ------------- | ------ |
@@ -611,6 +625,8 @@ Validate release using Continuous Verification
 - If the verification fails harness defaults to a manual intervention, you can now decide what you want to happen next (rollback, ignore etc.) 
 
 - Add a canary rollout from 10% to 50% traffic and see how this impacts the traffic distribution
+
+---
 
 # Lab 9 - Governance/Policy as Code (Advanced)
 
