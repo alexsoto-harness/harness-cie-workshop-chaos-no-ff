@@ -597,7 +597,6 @@ Validate release using Continuous Verification
 
 ## Steps
 
------------
 
 **1.** First, we need to deploy a new version of our backend to the canary environment so we can demonstrate how to rollback a failed release. Click the **Run** button in the upper right corner to execute the pipeline but this time, select the backend-v2 in the dropdown box that pops up.
 
@@ -616,9 +615,9 @@ Validate release using Continuous Verification
 
 **3.** When the pipeline progresses after the IACM Approval, it will eventually pause again on the ServiceNow Approval stage. At this point, the orchestration pipeline automatically created the SNOW change record on behalf of you (the developer) and updated the ticket with the details needed for a release. No manual change records to maintain by the developer - everything is automated. Next, let's simulate a release manager signing off on the implementation.
 
-Click on the **ServiceNow Approval** stage, click on the **Approval** step, and click on the change record hyperlink in the step details on the right to open the change record in a new window.
+- Click on the **ServiceNow Approval** stage, click on the **Approval** step, and click on the change record hyperlink in the step details on the right to open the change record in a new tab.
 
-Next, login to the SNOW sandbox instance with the name **workshopuser** and the same password you used to log in to the lab. Click the Implement button in the upper right corner. While you're there, observe the metadata provided by the pipeline. Click back to the Harness tab in your browser and observe the pipeline progressing once the change record was approved.
+- Next, login to the SNOW sandbox instance with the name **workshopuser** and the same password you used to log in to the lab. Click the Implement button in the upper right corner. While you're there, observe the metadata provided by the pipeline. Click back to the Harness tab in your browser and observe the pipeline progressing once the change record was approved.
 
 ![ServiceNow Approval](images/lab8-snow-approval.gif "ServiceNow Approval")
 
