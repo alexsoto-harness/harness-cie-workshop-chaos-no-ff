@@ -615,15 +615,15 @@ Validate release using Continuous Verification
 
 ![IaCM Approval](images/lab8-iacm-approval.gif "IaCM Approval")
 
-**3.** When the pipeline progresses after the IACM Approval, it will eventually pause again on the ServiceNow Approval stage. At this point, the orchestration pipeline automatically created the SNOW change record on behalf of the you (or the developer) and updated the ticket with the details needed for a release. No manual change records or manual governance needed. Let's simulate a release manager signing off on the implementation.
+**3.** When the pipeline progresses after the IACM Approval, it will eventually pause again on the ServiceNow Approval stage. At this point, the orchestration pipeline automatically created the SNOW change record on behalf of you (the developer) and updated the ticket with the details needed for a release. No manual change records to maintain by the developer - everything is automated. Next,et's simulate a release manager signing off on the implementation.
 
 Click on the **ServiceNow Approval** stage, click on the **Approval** step, and click on the change record hyperlink in the step details on the right to open the change record in a new window.
 
-Next, login to the SNOW sandbox instance with the name **workshopuser** and the same password you used to log in to the lab. Click the Implement button in the upper right corner. While you're there, observe the metadata provided by the pipeline. Click back to the Harness tab and observe the pipeline progressing once the change record was approved.
+Next, login to the SNOW sandbox instance with the name **workshopuser** and the same password you used to log in to the lab. Click the Implement button in the upper right corner. While you're there, observe the metadata provided by the pipeline. Click back to the Harness tab in your browser and observe the pipeline progressing once the change record was approved.
 
 ![ServiceNow Approval](images/lab8-snow-approval.gif "ServiceNow Approval")
 
-**4.** While the canary deployment is ongoing navigate to the web page and see if you can spot the canary (use the check release button) 
+**4.** As the pipeline progresses to the backend deployment, navigate to the web page and see if you can spot the canary (use the check release button). 
 
    | project                | domain        | suffix |
    | ---------------------- | ------------- | ------ |
@@ -634,17 +634,16 @@ Next, login to the SNOW sandbox instance with the name **workshopuser** and the 
 ![Canary Verify](images/lab8-canary-verify-v2.gif "Canary Verify")
 
 ------
-**TODO** insert screenshot of canary with v2 and where to find the build Id
-------
 
-- Drill down to the distribution test tab and run the traffic generation by clicking the **Start** button
+**5.** Next we're going to generate some traffic to the canary to test the automated release validation. Click the **Start** button in the Distribution Test panel.
 
 - Observe the traffic distribution
 
-- Validate the outcome of the verification on the pipeline execution details
-
 ![](https://lh7-us.googleusercontent.com/docsz/AD_4nXdbAmEJ5zQPsKlw_nEknWvYo97pm5eWCXr6vU8-GgIL0ulAOSH9N07PoEcVSknARVQo7Tgj1s31VHqR1I3hu2dMIO1rIX5HHcmTPXoQPoyo8CPv13OhnJN5WVcZqSwUXzdDHmm3PxUnhtpGVl0PAMJ_1wnuodvUbVPBOdnGKQ?key=cRG2cvp_PHVW0KG2Gq6Y_A)
 ![](https://lh7-us.googleusercontent.com/docsz/AD_4nXf-5oWX9OfvdmEb9MBm2_h2KKAa_QwmiJoM0fiKrTuxAr6GR4wxeulSlk48gyBK3dykrtIslDSkxpiGytrxH0JaxaQ4ZgTYxbmc8OenAH3nhGCvvOAxkWVjVBp1TRg_qQQi9z8OrNPK4udPtNL1LIyym6Ch5IMzrulFOcXhOQ?key=cRG2cvp_PHVW0KG2Gq6Y_A)
+
+**6.** Switch back to the Harness tab in your browser to observe the pipeline behavior. Note: it could take 5-7 minutes for the Continuous Verfiication process to complete. 
+- Validate the outcome of the verification on the pipeline execution details
 
 **Bonus**:
 - If the verification fails harness defaults to a manual intervention, you can now decide what you want to happen next (rollback, ignore etc.) 
