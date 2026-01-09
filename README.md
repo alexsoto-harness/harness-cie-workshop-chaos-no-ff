@@ -355,8 +355,8 @@ This lab proves that governance does not have to be manual, inconsistent, or slo
    | Input | Value |
    | ----- | ----- |
    | Entity Type | Pipeline |
-   | Organization | {your-org} |
-   | Project | {your-project} |
+   | Organization | \<your-org\> |
+   | Project | \<your-project\> |
    | Action | On Save |
 
 **4.** Select your most recent pipeline save and click **Apply**.
