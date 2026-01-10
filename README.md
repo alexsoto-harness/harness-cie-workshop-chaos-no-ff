@@ -135,7 +135,7 @@ This lab demonstrates how application teams deploy software without custom scrip
    | Stage Name | frontend | |
    | Deployment Type | Kubernetes | |
 
-![Click on the plus icon to add a new stage](images/lab3-deploy-stage.gif "Add Stage")
+![Click on the plus icon to add a new stage](images/lab2-deploy-stage.gif "Add Stage")
 
 **4.** Configure the **frontend** Stage with the following
 
@@ -164,7 +164,7 @@ This lab demonstrates how application teams deploy software without custom scrip
 
    - Click **Save** to close the service window and then click **Continue** to go to the Environment tab
 
-![Create the frontend service](images/lab3-frontend-svc-har.gif "Create Service")
+![Create the frontend service](images/lab2-frontend-svc-har.gif "Create Service")
 
    ### Environment
 
@@ -186,7 +186,7 @@ This lab demonstrates how application teams deploy software without custom scrip
 
    - **Save** the pipeline.
 
-![Add the environment](images/lab3-frontend-env.gif "Add Environment")
+![Add the environment](images/lab2-frontend-env.gif "Add Environment")
 
 ---
 # Lab 3 - Continuous Deployment - Backend
@@ -256,7 +256,7 @@ This lab validates Harness’s ability to safely deploy changes to production us
    | Stage: frontend | frontend | _Leave as is_ |
    | Stage: backend | backend | _Leave as is_ |
 
-![Canary Deployment](images/lab4-canary.gif "Canary Deployment")
+![Canary Deployment](images/lab3-canary.gif "Canary Deployment")
 
 **5.** While the canary deployment is ongoing and waiting **approval** navigate to the web page and see if you can spot Captain Canary (use the Check Release button to refresh) 
 
@@ -273,7 +273,7 @@ This lab validates Harness’s ability to safely deploy changes to production us
 # Lab 4 - Artifact Registry
 
 ## Summary
-This lab focuses on managing and securing your container images through Harness Artifact Registry. You'll learn how to configure your registries to automatically scan images for vulnerabilities, pull images from the registry, and leverage upstream proxies to controle images pulled from public repositories. 
+This lab focuses on managing and securing your container images through Harness Artifact Registry. You'll learn how to configure your registries to automatically scan images for vulnerabilities, pull images from the registry, and leverage upstream proxies to control images pulled from public repositories. 
 
 ## Objectives
 - Configure artifact registries for vulnerability scanning
@@ -293,19 +293,19 @@ This lab demonstrates how Harness Artifact Registry helps you secure your contai
 
 **4.** Find the **Security** configuration section. Turn on automated image scanning with one click by checking the box next to AquaTrivy.
 
-**5.** Find the **Advanced (Optional)** configuraiton section and expand it. Notice the Org-level Upstream Proxy that's already been configured for you.
+**5.** Find the **Advanced (Optional)** configuration section and expand it. Notice the Org-level Upstream Proxy that's already been configured for you.
 
 **6.** Click the **Save** button at the top of the page to save your changes.
 
-![Registry Security Scanning](images/lab5-configure-registry-for-scanning.gif "Automated vulnerability scanning")
+![Registry Security Scanning](images/lab4-configure-registry-for-scanning.gif "Automated vulnerability scanning")
 
 ### Improved developer workflows - easily push and pull images
 
-**1.** From the **har-<your_project_id>** registry, click the Artifacts tab to find the **harness-workshop** image and click on the link to the image. Expand the "-1" version and click on the digest hyberlink. Finally, click the **Set Up Client** button in the upper right corner.
+**1.** From the **har-<your_project_id>** registry, click the Artifacts tab to find the **harness-workshop** image and click on the link to the image. Expand the "-1" version and click on the digest hyperlink. Finally, click the **Set Up Client** button in the upper right corner.
 
 **2.** On **Step 2** of the Docker Client Setup pop-up, click the **Generate Token** link to generate a token you'll use to authenticate to this registry. Paste the key in a text editor that can be referenced later.
 
-![Setup Client](images/lab5-setup-client.gif "Setup Client Wizard")
+![Setup Client](images/lab4-setup-client.gif "Setup Client Wizard")
 
 **3.** Copy the provided Docker configuration commands and run them in from your local machine or cloud shell to configure your Docker client to pull the **harness-workshop** image to your machine, re-tag it (e.g., `latest`), and push back to Harness Artifact Registry. E.g.:
 
@@ -365,7 +365,7 @@ This lab proves that governance does not have to be manual, inconsistent, or slo
 
 > **Note:** Since the policy checks that we have an approval before any deployment stage, it's expected that it failed. Failure is success! The policy is working as designed.
 
-![Policy as Code](images/lab6-opa.gif "Policy as Code")
+![Policy as Code](images/lab5-opa.gif "Policy as Code")
 
 **6.** Let's now enforce it. Click on **Policy Sets** from the top right.
 
@@ -383,7 +383,7 @@ This lab proves that governance does not have to be manual, inconsistent, or slo
 
 > **Note:** As we expected, we are not allowed to save our pipeline until we've added an Approval. Let's fix it!
 
-![Policy Violation](images/lab6-policy-violation.gif "Policy Violation")
+![Policy Violation](images/lab5-policy-violation.gif "Policy Violation")
 
 ### Approvals via ServiceNow Change Requests
 
@@ -407,7 +407,7 @@ This lab proves that governance does not have to be manual, inconsistent, or slo
 
 **8.** Save the pipeline. No violations this time, hooray for compliance!
 
-![ServiceNow Approval](images/lab6-add-approval.gif "ServiceNow Approval")
+![ServiceNow Approval](images/lab5-add-approval.gif "ServiceNow Approval")
 
 > **Bonus:** Add a step to close the ServiceNow ticket after the last step of the **backend** stage, indicating that we've successfully deployed to production. *Hint: there's a template already created.*
 
@@ -442,7 +442,7 @@ This lab validates how Harness detects deployment issues based on real system be
 
 **4.** Within the Verify step configuration panel, select the **Advanced** tab and expand the **Failure Strategy** section. In the **Perform Action** configuration, change the behavior to **Rollback Stage**.
 
-![Continuous Verification](images/lab7-cv.gif)
+![Continuous Verification](images/lab6-cv.gif)
 
 **5.** Under the Verify step, click the **+** icon to add a new step **in parallel**
 
@@ -460,7 +460,7 @@ This lab validates how Harness detects deployment issues based on real system be
 
 **8.** Click **Save**
 
-![Chaos](images/lab7-chaos.gif "Chaos")
+![Chaos](images/lab6-chaos.gif "Chaos")
 
 ---
 
@@ -488,7 +488,7 @@ This lab demonstrates the full power of a modern CD platform by combining multip
    | Stage: frontend | frontend | _Leave as is_ |
    | Stage: backend | backend | _Leave as is_ |
 
-![Screenshot](images/lab8-pick-v2.png)
+![Screenshot](images/lab7-pick-v2.png)
 
 **2.** The pipeline will eventually pause on the ServiceNow Approval stage. At this point, the orchestration pipeline automatically created the SNOW change record on behalf of you (the developer) and updated the ticket with the details needed for a release. No manual change records to maintain by the developer - everything is automated. Next, let's simulate a release manager signing off on the implementation.
 
@@ -496,7 +496,7 @@ This lab demonstrates the full power of a modern CD platform by combining multip
 
 - Next, login to the SNOW sandbox instance with the name **workshopuser** and the same password you used to log in to the lab. Click the Implement button in the upper right corner. While you're there, observe the metadata provided by the pipeline. Click back to the Harness tab in your browser and observe the pipeline progressing once the change record was approved.
 
-![ServiceNow Approval](images/lab8-snow-approval.gif "ServiceNow Approval")
+![ServiceNow Approval](images/lab7-snow-approval.gif "ServiceNow Approval")
 
 **4.** As the pipeline progresses to the backend deployment, navigate to the web page and see if you can spot the canary (use the check release button). 
 
@@ -506,9 +506,9 @@ This lab demonstrates the full power of a modern CD platform by combining multip
 
 - Validate that we've deployed the new version in the canary by checking the version is **backend-v2** and the Last Execution matches the **build Id** of your pipeline
 
-![Canary Verify](images/lab8-canary-verify-v2.gif "Canary Verify")
+![Canary Verify](images/lab7-canary-verify-v2.gif "Canary Verify")
 
-------
+---
 
 **5.** Next we're going to generate some traffic to the canary to test the automated release validation. Click the **Start** button in the Distribution Test panel.
 
@@ -549,7 +549,7 @@ This lab demonstrates how to enforce security standards automatically across you
 
 **6.** Like before, try making a simple change to your pipeline, like adding a tag to the pipeline name and click **Save** in the upper right to see how the policy enforcement behaves.
 
-![STO OPA Failure](images/lab9-sto-required-error.gif "STO OPA Policy")
+![STO OPA Failure](images/lab8-sto-required-error.gif "STO OPA Policy")
 
 **7.** Align to the enterprise security standards by adding a new stage before the ServiceNow Approval. Hover over the pipeline and click the **+** button to add a new stage. On the pop-up, select **Use Template**.
 
@@ -559,7 +559,7 @@ This lab demonstrates how to enforce security standards automatically across you
 
 **10.** Click **Save** in the upper right corner to save the changes to your pipeline. You are now in compliance with the enterprise security standards so you are allowed to save your changes.
 
-![STO Template](images/lab9-sto-template.gif "STO Template")
+![STO Template](images/lab8-sto-template.gif "STO Template")
 
 ### Automatically Block Critical CVEs in the Pipeline
 
@@ -571,7 +571,7 @@ This lab demonstrates how to enforce security standards automatically across you
 
 **5.** Save the pipeline and click **Run**. In the run options, select the **backend-v2** version.
 
-![OPA Template](images/lab9-opa-template.gif "OPA Template")
+![OPA Template](images/lab8-opa-template.gif "OPA Template")
 
 > **Note:** Expect the pipeline to fail at the policy evaluation step. The OWASP scan found critical vulnerabilities, and the policy we just created is doing its job blocking the release before it reaches production. If you'd like to get back in compliance so the pipeline can proceed, navigate to **Project Settings --> Policies --> OWASP CVEs** and change the Rego policy on the left from `critical > 0` to `critical > 6`.
 
@@ -594,7 +594,7 @@ This lab shows how to close the loop on failed deployments by automatically upda
 
 **2.** Click into the Deploy **backend** stage and toggle the Rollback view in the right corner.
 
-![Rollback view](images/lab8-rollback-view.png "Rollback view")
+![Rollback view](images/lab9-rollback-view.png "Rollback view")
 
 **3.** Click the '**+**' button at the end of the pipeline to add a new step and select **Use Template**.
 
@@ -602,4 +602,4 @@ This lab shows how to close the loop on failed deployments by automatically upda
 
 **5.** Apply the changes and Save the pipeline. 
 
-![Rollback studio](images/lab8-rollback-studio.gif "Rollback studio")
+![Rollback studio](images/lab9-rollback-studio.gif "Rollback studio")
