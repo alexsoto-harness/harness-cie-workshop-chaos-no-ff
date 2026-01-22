@@ -572,9 +572,9 @@ This lab demonstrates how to enforce security standards automatically across you
 
 **7.** Select the Security Scans template and click the **Use Template** button in the lower right corner.
 
-**8.** _**IMPORTANT:** Name the stage **Scan**. This name reference is used downstream in the pipeline so be sure to name it exactly **Scan**._ Click **Set Up Stage**.
+> **Note:** Name the stage **Scan**. This name reference is used downstream in the pipeline so be sure to name it exactly **Scan**._ Click **Set Up Stage**.
 
-**9.** Click **Save** in the upper right corner to save the changes to your pipeline. You are now in compliance with the enterprise security standards so you are allowed to save your changes.
+**8.** Click **Save** in the upper right corner to save the changes to your pipeline. You are now in compliance with the enterprise security standards so you are allowed to save your changes.
 
 ![STO Template](images/lab8-sto-template.gif "STO Template")
 
