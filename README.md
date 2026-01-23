@@ -1,17 +1,16 @@
 # Table of Contents
 
-- Lab 1 - Build (Skip this)
-- [Lab 2 - Continuous Deployment - Frontend (Start here)](#user-content-lab-2---continuous-deployment---frontend)
-- [Lab 3 - Continuous Deployment - Backend](#user-content-lab-3---continuous-deployment---backend)
-- [Lab 4 - Artifact Registry](#user-content-lab-4---artifact-registry)
-- [Lab 5 - Policy, Governance & Change Management](#user-content-lab-5---policy-governance--change-management)
-- [Lab 6 - Continuous Verification](#user-content-lab-6---continuous-verification)
-- [Lab 7 - Release Validation & Automatic Rollback](#user-content-lab-7---release-validation--automatic-rollback)
-- [Lab 8 - Automated Security Standards Enforcement](#user-content-lab-8---automated-security-standards-enforcement)
-- [Lab 9 - Enhanced Change Management Automation (Optional)](#user-content-lab-9---enhanced-change-management-automation)
+- [Lab 1 - Continuous Deployment - Frontend (Start here)](#user-content-lab-1---continuous-deployment---frontend)
+- [Lab 2 - Continuous Deployment - Backend](#user-content-lab-2---continuous-deployment---backend)
+- [Lab 3 - Artifact Registry](#user-content-lab-3---artifact-registry)
+- [Lab 4 - Policy, Governance & Change Management](#user-content-lab-4---policy-governance--change-management)
+- [Lab 5 - Continuous Verification](#user-content-lab-5---continuous-verification)
+- [Lab 6 - Release Validation & Automatic Rollback](#user-content-lab-6---release-validation--automatic-rollback)
+- [Lab 7 - Automated Security Standards Enforcement](#user-content-lab-7---automated-security-standards-enforcement)
+- [Lab 8 - Enhanced Change Management Automation (Optional)](#user-content-lab-8---enhanced-change-management-automation)
 
 <details>
-  <summary><strong>Lab 1 - Build (Skip This Lab - Reference Only)</strong></summary>
+  <summary><strong>This CI lab was completed for you before today's workshop. Including for reference only.</strong></summary>
 
 > **Note:** This lab has been pre-completed for you. We will walk through the configuration during the workshop introduction, but you will not need to create these steps. This pipeline is already set up and ready to use in subsequent labs.
 
@@ -106,7 +105,7 @@ This lab establishes the starting point of the software delivery lifecycle and e
 
 ---
 
-# Lab 2 - Continuous Deployment - Frontend
+# Lab 1 - Continuous Deployment - Frontend
 
 ## Summary: 
 Our application compiled successfully and the artifact is in the Harness Artifact Registry. Time to deploy it. Extend the pipeline to ship the frontend to a Kubernetes cluster using a rolling deployment. The manifests are ready, no manual kubectl commands, no deployment scripts to maintain, just point Harness at your manifests and let it handle the rest.
