@@ -188,7 +188,7 @@ This lab demonstrates how application teams deploy software without custom scrip
 ![Add the environment](images/lab2-frontend-env.gif "Add Environment")
 
 ---
-# Lab 3 - Continuous Deployment - Backend
+# Lab 2 - Continuous Deployment - Backend
 
 ## Summary
 Frontend is done. Now for the backend, where things can actually break in expensive ways. Let's use a canary deployment strategy with a manual approval before a broad rollout in order to minimize the blast radius. Deploy to a small slice of traffic, verify the canary is healthy, then promote to everyone. Progressive delivery made easy. 
@@ -269,7 +269,7 @@ This lab validates Harness’s ability to safely deploy changes to production us
 
 ---
 
-# Lab 4 - Artifact Registry
+# Lab 3 - Artifact Registry
 
 ## Summary
 This lab focuses on managing and securing your container images through Harness Artifact Registry. You'll learn how to configure your registries to automatically scan images for vulnerabilities, pull images from the registry, and leverage upstream proxies to control images pulled from public repositories. 
@@ -327,7 +327,7 @@ From a developer experience perspective, developers have a single URL to use for
 **6.** After the scan pipeline has finished, navigate back to _Artifact Registry --> Artifacts --> (Expand) **harness-workshop:latest** --> click on the digest hyperlink._ You should see the scan results under the "Vulnerabilities" tab. _Extra Credit: while you're here, take a look at the SBOM tab to understand the composition of the artifact we built, including the open source dependencies._
 
 ---
-# Lab 5 - Policy, Governance & Change Management
+# Lab 4 - Policy, Governance & Change Management
 
 ## Summary
 You've built a pipeline that builds, tests, and deploys your frontend and backend services. Now the compliance team wants a word. In regulated environments, you can't just ship code to production without following change compliance policies and maintaining an audit trail for traceability. In this lab, we'll enforce governance with Policy-as-Code, ensuring every pipeline has an approval gate, and integrate with ServiceNow for automated change management. Compliance as code, not compliance as bottleneck.
@@ -412,7 +412,7 @@ This lab proves that governance does not have to be manual, inconsistent, or slo
 
 ---
 
-# Lab 6 - Continuous Verification
+# Lab 5 - Continuous Verification
 
 ## Summary
 Canary deployments are great, but how do you know the canary is actually healthy? Continuous verification integrates with your observability tools and uses ML to compare metrics and logs against the baseline in real-time. No manual dashboard watching required. We'll also add chaos experiments to stress-test the deployment. If the canary survives intentional chaos, it's ready for production.
@@ -463,7 +463,7 @@ This lab validates how Harness detects deployment issues based on real system be
 
 ---
 
-# Lab 7 - Release Validation & Automatic Rollback
+# Lab 6 - Release Validation & Automatic Rollback
 
 ## Summary
 This is where it all comes together. Watch the entire delivery pipeline flow from commit to production: multi-service deployments, automated change management with ServiceNow approvals, canary deployments validated by ML-powered verification, and chaos experiments checking the resiliency of your release. If something breaks, the pipeline rolls back automatically. No war rooms, only pizza parties.
@@ -537,7 +537,7 @@ This lab demonstrates the full power of a modern CD platform by combining multip
 
 ---
 
-# Lab 8 - Automated Security Standards Enforcement
+# Lab 7 - Automated Security Standards Enforcement
 
 ## Summary
 Honor system enforcement of security scans is great. Automated enforcement of security scans and blocking bad deployments is better. Using policy-as-code OPA policies, ensure all deployments are scanned for vulnerabilities and automatically turn vulnerability findings into hard stops to ensure critical CVEs never reach production.
@@ -595,7 +595,7 @@ This lab demonstrates how to enforce security standards automatically across you
 
 ---
 
-# Lab 9 - Enhanced Change Management Automation
+# Lab 8 - Enhanced Change Management Automation
 
 ## Summary
 Close the loop on failed releases. Configure rollback steps that automatically update ServiceNow when deployments fail.
