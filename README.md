@@ -118,7 +118,7 @@ Our application compiled successfully and the artifact is in the Harness Artifac
 - Implement rolling deployment strategies
 
 ## Why It Matters
-This lab demonstrates how application teams deploy software without custom scripts, using a standardized, visual pipeline model. Participants validate how environments, approvals, and promotions are handled consistently while maintaining speed and control.
+This lab demonstrates how teams can quickly and easily deploy software without custom scripting, leveraging native rolling deployment capbilities. The lab goes under the hood to show what teams deploy (the Harness Service) and where they deploy it (the Harness Environment) are decoupled from the deployment logic defined in the pipeline. This decoupled architecture unlocks pipeline standardization at scale. 
 
 ## Steps
 **1.** From the Unified View left navigation bar, navigate to **Projects** → **Select the project available**
@@ -199,7 +199,7 @@ Frontend is done. Now for the backend, where things can actually break in expens
 - Add manual approval gates and keep the human in the loop for controlled production releases
 
 ## Why It Matters
-This lab validates Harness’s ability to safely deploy changes to production using advanced deployment strategies. Participants experience how risk is reduced through progressive delivery, automated rollback, and built-in failure handling — without complex scripting.
+This lab validates Harness’s ability to safely deploy changes to production using advanced deployment strategies. Participants experience how risk is reduced through progressive delivery and manual validation — without complex scripting.
 ## Steps
 **1.** In the existing pipeline, add a Deployment stage by clicking **Add Stage** and select **Deploy** as the Stage Type
 
