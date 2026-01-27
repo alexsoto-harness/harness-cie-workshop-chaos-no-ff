@@ -11,7 +11,7 @@
 - [Lab 9 - Enhanced Change Management Automation (Optional)](#user-content-lab-9---enhanced-change-management-automation)
 
 <details>
-  <summary><strong>Lab 1 - Build (Skip This Lab - Reference Only)</strong></summary>
+  <summary><strong>This CI lab was completed for you before today's workshop. Including for reference only.</strong></summary>
 
 > **Note:** This lab has been pre-completed for you. We will walk through the configuration during the workshop introduction, but you will not need to create these steps. This pipeline is already set up and ready to use in subsequent labs.
 
@@ -119,7 +119,7 @@ Our application compiled successfully and the artifact is in the Harness Artifac
 - Implement rolling deployment strategies
 
 ## Why It Matters
-This lab demonstrates how application teams deploy software without custom scripts, using a standardized, visual pipeline model. Participants validate how environments, approvals, and promotions are handled consistently while maintaining speed and control.
+This lab demonstrates how teams can quickly and easily deploy software without custom scripting, leveraging native rolling deployment capabilities. The lab goes under the hood to show what teams deploy (the Harness Service) and where they deploy it (the Harness Environment) are decoupled from the deployment logic defined in the pipeline. This decoupled architecture unlocks pipeline standardization at scale.
 
 ## Steps
 **1.** From the Unified View left navigation bar, navigate to **Projects** → **Select the project available**
@@ -200,7 +200,8 @@ Frontend is done. Now for the backend, where things can actually break in expens
 - Add manual approval gates and keep the human in the loop for controlled production releases
 
 ## Why It Matters
-This lab validates Harness’s ability to safely deploy changes to production using advanced deployment strategies. Participants experience how risk is reduced through progressive delivery, automated rollback, and built-in failure handling — without complex scripting.
+This lab validates Harness's ability to safely deploy changes to production using advanced deployment strategies. Participants experience how risk is reduced through progressive delivery and manual validation — without complex scripting.
+
 ## Steps
 **1.** In the existing pipeline, add a Deployment stage by clicking **Add Stage** and select **Deploy** as the Stage Type
 
@@ -307,7 +308,7 @@ This lab demonstrates how Harness Artifact Registry helps you secure your contai
 
 ![Setup Client](images/lab4-setup-client.gif "Setup Client Wizard")
 
-**3.** Copy the provided Docker configuration commands and run them in from your local machine or cloud shell to configure your Docker client to pull the **harness-workshop** image to your machine, re-tag it (e.g., `latest`), and push back to Harness Artifact Registry. E.g.:
+**3.** Copy the provided Docker configuration commands and run them from your local machine or cloud shell to configure your Docker client to pull the **harness-workshop** image to your machine, re-tag it (e.g., `latest`), and push back to Harness Artifact Registry. E.g.:
 
 ```bash
 docker login pkg.harness.io -u <your_workshop_username> -p <your_token>
@@ -325,7 +326,7 @@ docker pull pkg.harness.io/ifg41dwvsnarlovnb2uesg/har-<your_project_id>/alpine:l
 ```
 From a developer experience perspective, developers have a single URL to use for any artifact they want to store or retrieve - public or private - reducing cognitive load and simplifying artifact management.
 
-**5.** After the scan pipeline has finished, navigate back to _Artifact Registry --> Artifacts --> (Expand) **harness-workshop:latest** --> click on the digest hyperlink._ You should see the scan results under the "Vulnerabilities" tab. _Extra Credit: while you're here, take a look at the SBOM tab to understand the composition of the artifact we built, including the open source dependencies._
+**6.** After the scan pipeline has finished, navigate back to _Artifact Registry --> Artifacts --> (Expand) **harness-workshop:latest** --> click on the digest hyperlink._ You should see the scan results under the "Vulnerabilities" tab. _Extra Credit: while you're here, take a look at the SBOM tab to understand the composition of the artifact we built, including the open source dependencies._
 
 ---
 # Lab 5 - Policy, Governance & Change Management
@@ -427,7 +428,7 @@ Canary deployments are great, but how do you know the canary is actually healthy
 This lab validates how Harness detects deployment issues based on real system behavior, not just pipeline success. Participants experience how deployments are continuously verified using telemetry + AI/ML, enabling faster detection and rollback of bad releases before they impact users, eliminating the need for manual monitoring, and reducing time-to-market.
 
 ## Steps
-**1.** Click on the **backend** deployment stage and hover over the **Approval** step. Delete it by clicking the **x**. We no longer need a manual approval since we we will add automated deployment validation next.
+**1.** Click on the **backend** deployment stage and hover over the **Approval** step. Delete it by clicking the **x**. We no longer need a manual approval since we will add automated deployment validation next.
 
 **2.** Between the **Canary Deployment** and **Canary Delete** steps, click the **+** icon to add a new step
 
@@ -442,7 +443,7 @@ This lab validates how Harness detects deployment issues based on real system be
 
 **4.** Within the Verify step configuration panel, select the **Advanced** tab and expand the **Failure Strategy** section. In the **Perform Action** configuration, change the behavior to **Rollback Stage**.
 
-![Continuous Verification](images/lab6-cv.gif)
+![Continuous Verification](images/lab6-cv.gif "Continuous Verification")
 
 **5.** Under the Verify step, click the **+** icon to add a new step **in parallel**
 
@@ -488,7 +489,7 @@ This lab demonstrates the full power of a modern CD platform by combining multip
    | Stage: frontend | frontend | _Leave as is_ |
    | Stage: backend | backend | _Leave as is_ |
 
-![Screenshot](images/lab7-pick-v2.png)
+![Select backend-v2](images/lab7-pick-v2.png "Select backend-v2")
 
 **2.** The pipeline will eventually pause on the ServiceNow Approval stage. At this point, the orchestration pipeline automatically created the SNOW change record on behalf of you (the developer) and updated the ticket with the details needed for a release. No manual change records to maintain by the developer - everything is automated. Next, let's simulate a release manager signing off on the implementation.
 
@@ -498,7 +499,7 @@ This lab demonstrates the full power of a modern CD platform by combining multip
 
 ![ServiceNow Approval](images/lab7-snow-approval.gif "ServiceNow Approval")
 
-**4.** As the pipeline progresses to the backend deployment, navigate to the web page and see if you can spot the canary (use the check release button). 
+**3.** As the pipeline progresses to the backend deployment, navigate to the web page and see if you can spot the canary (use the check release button). 
 
    | project                | domain        | suffix |
    | ---------------------- | ------------- | ------ |
@@ -510,14 +511,31 @@ This lab demonstrates the full power of a modern CD platform by combining multip
 
 ---
 
-**5.** Next we're going to generate some traffic to the canary to test the automated release validation. Click the **Start** button in the Distribution Test panel.
+**4.** Next we're going to generate some traffic to the canary to test the automated release validation. Click the **Start** button in the Distribution Test panel.
 
 - Observe the traffic distribution. You should see traffic routing to a subset of the infrastructure.
 
 ![](https://lh7-us.googleusercontent.com/docsz/AD_4nXdbAmEJ5zQPsKlw_nEknWvYo97pm5eWCXr6vU8-GgIL0ulAOSH9N07PoEcVSknARVQo7Tgj1s31VHqR1I3hu2dMIO1rIX5HHcmTPXoQPoyo8CPv13OhnJN5WVcZqSwUXzdDHmm3PxUnhtpGVl0PAMJ_1wnuodvUbVPBOdnGKQ?key=cRG2cvp_PHVW0KG2Gq6Y_A)
 ![](https://lh7-us.googleusercontent.com/docsz/AD_4nXf-5oWX9OfvdmEb9MBm2_h2KKAa_QwmiJoM0fiKrTuxAr6GR4wxeulSlk48gyBK3dykrtIslDSkxpiGytrxH0JaxaQ4ZgTYxbmc8OenAH3nhGCvvOAxkWVjVBp1TRg_qQQi9z8OrNPK4udPtNL1LIyym6Ch5IMzrulFOcXhOQ?key=cRG2cvp_PHVW0KG2Gq6Y_A)
 
-**6.** Switch back to the Harness tab in your browser to observe the pipeline behavior. 
+**5.** Switch back to the Harness tab in your browser to observe the pipeline behavior. The Chaos experiment and Continuous Verification steps will run for approximately 5 minutes. Wait for them to complete.
+
+**6.** Once the Verify step completes, select it and notice that **1 out of 1 metric is in violation**. Click **View Details ->** to inspect the failure.
+
+**7.** Harness ingests telemetry from Prometheus to determine the health of the release. You'll see that the **Pod Memory** metric is flagged as anomalous. Expand it to examine its behavior:
+
+- The **solid red line** represents the canary's memory usage, which is growing in an unbounded way
+- The **dotted blue line** represents control data from the previous stable release, showing no memory increase and serving as our baseline
+
+> **Note:** This pattern points to a memory leak in **backend-v2** that would have been difficult to detect without this data. Traditionally, if a service starts up cleanly, we consider it a successful release. But issues like memory leaks only manifest under load over time, making them notoriously hard to diagnose. This is precisely why continuous verification is so crucial, it catches problems that traditional health checks miss.
+
+**8.** Click the **Console View** toggle in the top right to return to the pipeline execution view.
+
+**9.** Notice that because the Verify step failed, Harness automatically initiated a rollback of the canary to the previous stable version. This automated rollback capability eliminates the need for manual intervention during incidents, reduces mean time to recovery and ensures your users are protected from degraded experiences while your team investigates the root cause.
+
+**10.** Finally, navigate back to the web application and verify that we've rolled back to **backend-v1**. Use the **Check Release** button to confirm the canary no longer appears.
+
+![CV Failure & Rollback](images/lab7-cv-fail.gif "CV Failure & Rollback")
 
 ---
 
@@ -545,31 +563,33 @@ This lab demonstrates how to enforce security standards automatically across you
 **3.** Toggle the **Enforced** on for both **Criticals Not Allowed** and **Security Scans Required Policy Set**.
 > **Note:** The underlying policies were pre-built in your project. _Criticals Not Allowed_ enforces the policy that blocks deployments with critical vulnerabilities. _Security Scans Required Policy Set_ ensures that all deployments have been scanned for security issues.
 
-**5.** Navigate back to your pipeline by click **Pipelines** in the Unified View of the left navigation bar.
+**4.** Navigate back to your pipeline by clicking **Pipelines** in the Unified View of the left navigation bar.
 
-**6.** Like before, try making a simple change to your pipeline, like adding a tag to the pipeline name and click **Save** in the upper right to see how the policy enforcement behaves.
+**5.** Like before, try making a simple change to your pipeline, like adding a tag to the pipeline name and click **Save** in the upper right to see how the policy enforcement behaves.
 
 ![STO OPA Failure](images/lab8-sto-required-error.gif "STO OPA Policy")
 
-**7.** Align to the enterprise security standards by adding a new stage before the ServiceNow Approval. Hover over the pipeline and click the **+** button to add a new stage. On the pop-up, select **Use Template**.
+**6.** Align to the enterprise security standards by adding a new stage before the ServiceNow Approval. Hover over the pipeline and click the **+** button to add a new stage. On the pop-up, select **Use Template**.
 
-**8.** Select the Security Scans template and click the **Use Template** button in the lower right corner.
+**7.** Select the Security Scans template and click the **Use Template** button in the lower right corner.
 
-**9.** _**IMPORTANT:** Name the the stage **Scan**. This name reference is used downstream in the pipeline so be sure to name it exactly **Scan**._ Click **Set Up Stage**.
+**8.** Name the stage **Scan** and click **Set Up Stage**.
 
-**10.** Click **Save** in the upper right corner to save the changes to your pipeline. You are now in compliance with the enterprise security standards so you are allowed to save your changes.
+> **Note:** Make sure you name it `Scan` as the name is referenced in downstream policies.
+
+**9.** Click **Save** in the upper right corner to save the changes to your pipeline. You are now in compliance with the enterprise security standards so you are allowed to save your changes.
 
 ![STO Template](images/lab8-sto-template.gif "STO Template")
 
 ### Automatically Block Critical CVEs in the Pipeline
 
-**1.** Select the **frontend** stage. Hover over the pipeline Before the **Rollout Deployment** step, and click the **+** button to add a new step. Then select **Use Template**.
+**1.** Select the **frontend** stage. Hover over the pipeline before the **Rollout Deployment** step, and click the **+** button to add a new step. Then select **Use Template**.
 
 **2.** Select the **Check Critical CVEs** template then click the **Use Template** button in the lower right corner.
 
 **3.** Name the policy step template **Block CVEs** and click **Apply Changes**.
 
-**5.** Save the pipeline and click **Run**. In the run options, select the **backend-v2** version.
+**4.** Save the pipeline and click **Run**. In the run options, select the **backend-v2** version.
 
 ![OPA Template](images/lab8-opa-template.gif "OPA Template")
 
@@ -580,7 +600,7 @@ This lab demonstrates how to enforce security standards automatically across you
 # Lab 9 - Enhanced Change Management Automation
 
 ## Summary
-Close the loop on failed releases. Configure rollback steps that automatically update ServiceNow when deployments fail
+Close the loop on failed releases. Configure rollback steps that automatically update ServiceNow when deployments fail.
 
 ## Objectives
 - Configure rollback-specific steps in deployment stages
