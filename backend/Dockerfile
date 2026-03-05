@@ -1,13 +1,16 @@
-FROM python:3.11-slim
+FROM maven:3.9-eclipse-temurin-17 AS build
 
-COPY . /app
 WORKDIR /app
+COPY pom.xml .
+RUN mvn dependency:go-offline -B
+COPY src ./src
+RUN mvn package -DskipTests -B
 
-RUN python3 -m venv /opt/venv
+FROM eclipse-temurin:17-jre-alpine
 
-RUN /opt/venv/bin/pip install pip --upgrade && \
-    /opt/venv/bin/pip install -r requirements.txt && \
-    chmod +x entrypoint.sh
+WORKDIR /app
+COPY --from=build /app/target/*.jar app.jar
 
+EXPOSE 8000
 
-CMD ["/bin/sh","/app/entrypoint.sh"]
+CMD ["java", "-jar", "app.jar"]
