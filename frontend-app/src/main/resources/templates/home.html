@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Harness Webapp</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/css/home.css">
+</head>
+<body style="background-color: black; margin: 0;">
+  <div th:replace="~{fragments/sidebar :: sidebar}"></div>
+
+  <div class="container" style="background-color: black; width:100%">
+    <div class="row">
+      <div class="col">
+        <div class="weather-card one" style="background-color:black">
+          <div class="top">
+
+            <!-- Canary view -->
+            <div th:if="${isCanary}" class="wrapper"
+                 style="background: url('/assets/canary-standing.png'); height: 600px;">
+              <div class="mynav">
+                <a href="javascript:;"><span class="lnr lnr-chevron-left"></span></a>
+                <a href="javascript:;"><span class="lnr lnr-cog"></span></a>
+              </div>
+              <h1 class="heading" style="color: rgb(28, 198, 28);" th:text="${serviceName}">Service</h1>
+              <div class="weather-card"
+                   style="background-color: rgba(58, 133, 218, 0.758); margin-top:200px; height: 100px; width: 350px;">
+                <h1 class="heading" style="font-size: 20px; color: rgb(28, 198, 28);">Version</h1>
+                <h3 class="location" style="font-size: 16px;" th:text="${applicationVersion}">v1.0</h3>
+              </div>
+              <div class="weather-card"
+                   style="background-color: rgba(58, 133, 218, 0.758); height: 100px; width: 350px;">
+                <h1 class="heading" style="font-size: 20px; color: rgb(28, 198, 28);">Last Execution</h1>
+                <h3 class="location" style="font-size: 16px;" th:text="${lastExecution}">12.3</h3>
+              </div>
+            </div>
+
+            <!-- Normal view -->
+            <div th:unless="${isCanary}" class="wrapper"
+                 style="background: linear-gradient(to bottom, black, rgba(0, 34, 128, 0.598) 50%, black); height: 600px;">
+              <div class="mynav">
+                <a href="javascript:;"><span class="lnr lnr-chevron-left"></span></a>
+                <a href="javascript:;"><span class="lnr lnr-cog"></span></a>
+              </div>
+              <h1 class="heading" style="color: #FFFFFF" th:text="${serviceName}">Service</h1>
+              <div class="weather-card" style="background-color: #ffffff20; height: 100px; width: 350px;">
+                <h1 class="heading" style="font-size: 20px; color: #FFFFFF">Version</h1>
+                <h3 class="location" style="font-size: 16px;" th:text="${applicationVersion}">v1.0</h3>
+              </div>
+              <div class="weather-card" style="background-color: #ffffff20; height: 100px; width: 350px;">
+                <h1 class="heading" style="font-size: 20px; color: #FFFFFF">Last Execution</h1>
+                <h3 class="location" style="font-size: 16px;" th:text="${lastExecution}">12.3</h3>
+              </div>
+            </div>
+
+          </div>
+          <div class="bottom">
+            <button type="button" class="btn btn-success" style="width:90%;margin:5%" id="checkReleaseBtn">
+              Check Release
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="col">
+        <div class="weather-card rain" style="background-color: black;">
+          <div class="top">
+            <div class="wrapper">
+              <div class="mynav">
+                <a href="javascript:;"><span class="lnr lnr-chevron-left"></span></a>
+                <a href="javascript:;"><span class="lnr lnr-cog"></span></a>
+              </div>
+              <h1 class="heading">Distribution Test</h1>
+              <h3 class="location">Synthetic Test</h3>
+              <p class="temp"></p>
+            </div>
+          </div>
+          <div class="bottom">
+            <a href="/distribution" class="btn btn-success" style="width:90%;margin:5%">Start</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('checkReleaseBtn').addEventListener('click', function () {
+      fetch('/api/execution')
+        .then(r => r.json())
+        .then(data => {
+          document.querySelector('.heading').textContent = data.service_name || 'Harness Webinar';
+          const versions = document.querySelectorAll('.location');
+          if (versions[0]) versions[0].textContent = data.application_version || 'v1.0';
+          if (versions[1]) versions[1].textContent = data.last_execution_id || '12.3';
+          if (data.deployment_type === 'canary') {
+            window.location.reload();
+          }
+        })
+        .catch(err => console.error('Error:', err));
+    });
+  </script>
+</body>
+</html>

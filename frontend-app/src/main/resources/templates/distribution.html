@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Distribution - Harness Webapp</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/css/distribution.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body style="background-color: black; margin: 0;">
+  <div th:replace="~{fragments/sidebar :: sidebar}"></div>
+
+  <div class="container" style="background-color: black; width:600px">
+    <div class="row" style="width:200px">
+      <div class="col">
+        <button class="btn" id="runBtn" style="margin:0;padding:0">
+          <svg xmlns="http://www.w3.org/2000/svg" width="40" height="45" fill="#FFFFFF" class="bi bi-play-btn" viewBox="0 0 16 16">
+            <path d="M6.79 5.093A.5.5 0 0 0 6 5.5v5a.5.5 0 0 0 .79.407l3.5-2.5a.5.5 0 0 0 0-.814z"/>
+            <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm15 0a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1z"/>
+          </svg>
+        </button>
+      </div>
+      <div class="col">
+        <button type="button" class="btn" id="refreshBtn" style="margin:0;padding:0; margin-top:7px;">
+          <svg style="border: 2px solid white; border-radius: 5px;" xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="#FFFFFF" class="bi bi-arrow-clockwise" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2z"/>
+            <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <div class="weather-card one" style="background-color:black">
+          <div class="top">
+            <div class="wrapper">
+              <div style="height: 300px; width:700px; background-color: black;">
+                <canvas id="distributionChart"></canvas>
+              </div>
+            </div>
+          </div>
+          <div class="bottom" style="margin-top:0px"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script th:inline="javascript">
+    const backendUrl = /*[[${backendUrl}]]*/ 'http://localhost:8000';
+    const distributionData = [];
+    let chart = null;
+    let apiIntervalId = null;
+    let refreshIntervalId = null;
+
+    function initChart() {
+      const ctx = document.getElementById('distributionChart').getContext('2d');
+      chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          datasets: []
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: {
+              type: 'category',
+              title: { display: true, text: 'Time', color: '#fff' },
+              ticks: { color: '#fff' },
+              grid: { color: 'rgba(255,255,255,0.1)' }
+            },
+            y: {
+              title: { display: false },
+              ticks: { color: '#fff' },
+              grid: { color: 'rgba(255,255,255,0.1)' }
+            }
+          },
+          plugins: {
+            legend: {
+              labels: { color: '#fff' }
+            }
+          }
+        }
+      });
+    }
+
+    function groupDataByTime(data) {
+      const grouped = {};
+      data.forEach(entry => {
+        const bucket = Math.floor(entry.created_at / 5) * 10;
+        if (!grouped[entry.name]) grouped[entry.name] = {};
+        if (!grouped[entry.name][bucket]) grouped[entry.name][bucket] = 0;
+        grouped[entry.name][bucket]++;
+      });
+      return grouped;
+    }
+
+    function refreshChart() {
+      const grouped = groupDataByTime(distributionData);
+      const allTimestamps = new Set();
+      Object.values(grouped).forEach(buckets => {
+        Object.keys(buckets).forEach(ts => allTimestamps.add(ts));
+      });
+      const labels = Array.from(allTimestamps).sort((a, b) => a - b)
+        .map(ts => new Date(parseInt(ts) * 1000).toLocaleTimeString());
+
+      const colors = { 'normal': '#9370DB', 'canary': '#FF7F50' };
+      const datasets = Object.entries(grouped).map(([name, buckets]) => {
+        const sortedTs = Array.from(allTimestamps).sort((a, b) => a - b);
+        return {
+          label: name,
+          data: sortedTs.map(ts => buckets[ts] || 0),
+          borderColor: colors[name] || '#87CEFA',
+          backgroundColor: (colors[name] || '#87CEFA') + '33',
+          tension: 0.3,
+          fill: true
+        };
+      });
+
+      chart.data.labels = labels;
+      chart.data.datasets = datasets;
+      chart.update();
+    }
+
+    function startRun() {
+      if (apiIntervalId) return;
+      apiIntervalId = setInterval(() => {
+        fetch('/api/create', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name: 'normal' })
+        })
+        .then(r => r.json())
+        .then(data => {
+          distributionData.push(data);
+          console.log('API call at', new Date().toISOString());
+        })
+        .catch(err => console.error('Error:', err));
+      }, 1000);
+
+      refreshIntervalId = setInterval(refreshChart, 30000);
+
+      setTimeout(() => {
+        clearInterval(apiIntervalId);
+        clearInterval(refreshIntervalId);
+        apiIntervalId = null;
+        refreshIntervalId = null;
+        console.log('API calls stopped after 10 minutes');
+      }, 10 * 60 * 1000);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      initChart();
+      document.getElementById('runBtn').addEventListener('click', startRun);
+      document.getElementById('refreshBtn').addEventListener('click', refreshChart);
+    });
+  </script>
+</body>
+</html>
