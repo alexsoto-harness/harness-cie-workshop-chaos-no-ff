@@ -1,6 +1,6 @@
 package com.harness.frontend.controller;
 
-import com.harness.frontend.service.BackendApiService;
+import com.harness.frontend.service.BackendApi;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,12 +11,12 @@ import java.util.Map;
 @Controller
 public class HomeController {
 
-    private final BackendApiService backendApiService;
+    private final BackendApi backendApiService;
 
     @Value("${harness.ff.sdk.key}")
     private String ffSdkKey;
 
-    public HomeController(BackendApiService backendApiService) {
+    public HomeController(BackendApi backendApiService) {
         this.backendApiService = backendApiService;
     }
 

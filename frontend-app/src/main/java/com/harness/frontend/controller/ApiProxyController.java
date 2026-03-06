@@ -1,6 +1,6 @@
 package com.harness.frontend.controller;
 
-import com.harness.frontend.service.BackendApiService;
+import com.harness.frontend.service.BackendApi;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,9 +10,9 @@ import java.util.Map;
 @RequestMapping("/api")
 public class ApiProxyController {
 
-    private final BackendApiService backendApiService;
+    private final BackendApi backendApiService;
 
-    public ApiProxyController(BackendApiService backendApiService) {
+    public ApiProxyController(BackendApi backendApiService) {
         this.backendApiService = backendApiService;
     }
 

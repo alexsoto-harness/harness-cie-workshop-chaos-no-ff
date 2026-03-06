@@ -1,32 +1,34 @@
 # Table of Contents
 
-- [Lab 1 - Continuous Deployment - Frontend (Start here)](#user-content-lab-1---continuous-deployment---frontend)
-- [Lab 2 - Continuous Deployment - Backend](#user-content-lab-2---continuous-deployment---backend)
-- [Lab 3 - Artifact Registry](#user-content-lab-3---artifact-registry)
-- [Lab 4 - Policy, Governance & Change Management](#user-content-lab-4---policy-governance--change-management)
-- [Lab 5 - Continuous Verification](#user-content-lab-5---continuous-verification)
-- [Lab 6 - Release Validation & Automatic Rollback](#user-content-lab-6---release-validation--automatic-rollback)
-- [Lab 7 - Automated Security Standards Enforcement](#user-content-lab-7---automated-security-standards-enforcement)
-- [Lab 8 - Enhanced Change Management Automation (Optional)](#user-content-lab-8---enhanced-change-management-automation)
+- [Lab 1 - Continuous Integration - Build](#user-content-lab-1---continuous-integration---build)
+- [Lab 2 - DevSecOps](#user-content-lab-2---devsecops)
+- [Lab 3 - Continuous Deployment - Frontend](#user-content-lab-3---continuous-deployment---frontend)
+- [Lab 4 - Continuous Deployment - Backend](#user-content-lab-4---continuous-deployment---backend)
+- [Lab 5 - Artifact Registry](#user-content-lab-5---artifact-registry)
+- [Lab 6 - Policy, Governance & Change Management](#user-content-lab-6---policy-governance--change-management)
+- [Lab 7 - Continuous Verification](#user-content-lab-7---continuous-verification)
+- [Lab 8 - Release Validation & Automatic Rollback](#user-content-lab-8---release-validation--automatic-rollback)
+- [Lab 9 - Automated Security Standards Enforcement](#user-content-lab-9---automated-security-standards-enforcement)
+- [Lab 10 - Enhanced Change Management Automation (Optional)](#user-content-lab-10---enhanced-change-management-automation)
 
-<details>
-  <summary><strong>This CI lab was completed for you before today's workshop. Including for reference only.</strong></summary>
+---
 
-> **Note:** This lab has been pre-completed for you. We will walk through the configuration during the workshop introduction, but you will not need to create these steps. This pipeline is already set up and ready to use in subsequent labs.
+# Lab 1 - Continuous Integration - Build
 
 ## Summary
-Setup a CI Pipeline, including running source code tests, building the executable, and building and pushing the artifact to Harness Artifact Registry.
+Every great deployment starts with a great build. In this lab, you'll set up a CI pipeline from scratch: running tests, compiling the application, and pushing a container image to a container registry. Think of it as laying the foundation so everything downstream has something solid to stand on.
 
-## Objectives:
-- Understand how to configure a basic pipeline using Harness CI
-- Review how to build and deploy an artifact to an artifact repository using Harness CI
-- Understand how unit tests are integrated into the build process using Harness CI
+## Objectives
 
-## Why It Matters:
-This lab establishes the starting point of the software delivery lifecycle and ensures artifacts entering the deployment process are consistent, repeatable, and traceable. While CI is not the focus of this POC, this lab validates that Harness cleanly integrates with existing CI workflows and produces deployable artifacts that downstream CD and Artifact Registry processes can rely on.
+- Create a CI pipeline using Harness CI
+- Run unit tests using Test Intelligence for faster feedback loops
+- Build and push a container image to a container registry
+- Understand how reusable templates reduce duplication across pipelines
+
+## Why It Matters
+If your artifacts aren't built consistently, nothing downstream matters. This lab establishes the starting point of the software delivery lifecycle and ensures every artifact entering the deployment process is repeatable and traceable. No more "works on my machine" just clean, versioned builds ready for prime time.
 
 ## Steps
-
 **1.** From the Unified View left navigation bar, navigate to **Projects** → **Select the project available**
 
 ![](https://lh7-us.googleusercontent.com/docsz/AD_4nXfhuMykMsIHl-7FjliWssHc0uwRpdLdrnq7GkGAI0g6UBZM69F1zpQ8ZA8N_vMqjpoGFYFR_weJk7OtOGGa2bksIaS6BlktwytmuJ1THM3e8O6tDT18HYWwFyGUye8ubsrHBChI8ORrCQ88JcKWpLjQ0DsXDS0NSZrkfZ4RUQ?key=cRG2cvp_PHVW0KG2Gq6Y_A)
@@ -35,27 +37,27 @@ This lab establishes the starting point of the software delivery lifecycle and e
 
 **3.** Click **+ Create a Pipeline**, enter the following values, then click **Start**
 
-   | Field | Value | Notes |
-   | ----  | ----- | ----- |
+   | Input | Value | Notes |
+   | ----- | ----- | ----- |
    | Name | workshop | *This is the name of the pipeline* |
-   | How do you want to setup your pipeline? | Inline | *This indicates that Harness (rather than Git) will be the source of truth for the pipeline* |
+   | How do you want to setup your pipeline? | Inline | *Harness (rather than Git) will be the source of truth for the pipeline* |
 
-**4.** From Pipeline Studio, Click **Add Stage** and select **Build** as the Stage Type
+**4.** From Pipeline Studio, click **Add Stage** and select **Build** as the Stage Type
 
 **5.** Enter the following values and click on **Set Up Stage**
 
    | Input | Value | Notes |
-   | ----  | ----- | ----- |
-   | Stage Name | Build | *This is the name of the stage* |
-   | Clone Codebase | Enabled | *This indicates that the codebase will be cloned* |
-   | Repository Name | harnessrepo | *This is the name of the repository* |
+   | ----- | ----- | ----- |
+   | Stage Name | Build | |
+   | Clone Codebase | Enabled | *The codebase will be cloned automatically* |
+   | Repository Name | harnessrepo | |
 
 **6.** There are **two** main tabs that need configuration:
 
    ### Infrastructure
 
    | Input | Value | Notes |
-   | ----  | ----- | ----- |
+   | ----- | ----- | ----- |
    | Infrastructure | Cloud | *Harness Cloud provides managed build infrastructure on demand* |
 
    ### Execution
@@ -63,17 +65,27 @@ This lab establishes the starting point of the software delivery lifecycle and e
    - Select **Add Step**, then **Add Step** again, then select **Test Intelligence** from the Step Library and configure with the following
 
    | Input | Value | Notes |
-   | ----  | ----- | ----- |
-   | Name | Run Tests With Intelligence | *Test Intelligence speeds up test execution by running only the tests that are relevant to the changes made in the codebase.* |
-   | Command | pip install pytest & cd ./python-tests | *The github repo is a monorepo with application(s) and configuration in the same repo. Therefore we need to navigate to the application subfolder* |
+   | ----- | ----- | ----- |
+   | Name | Run Tests With Intelligence | |
+   | Command | cd frontend-app && mvn test | *Our monorepo requires navigating to the application subfolder* |
 
-   - After completing configuration select **Apply Changes** from the top right of the configuration popup
-
-   - Select **Add Step**, then **Use template** (In this step we will be building the binary following same config as before. To avoid duplication of efforts a template has been precreated)
+   Under **Optional Configuration**:
 
    | Input | Value | Notes |
    | ----- | ----- | ----- |
-   | Template Name | Compile Application | *This template provides us a reusable and standard way to build Angular applications* |
+   | Container Registry | dockerhub | *Click the **Project** tab in the connector popup to find it, then select **Apply Selected*** |
+   | Image | maven:3.9-eclipse-temurin-17 | *Provides Maven + JDK 17 for the build* |
+   | Intelligence Mode | Enabled | *Only runs tests affected by your code changes* |
+
+   - After completing configuration select **Apply Changes**
+
+   #### Compile & Push
+
+   - Select **Add Step**, then **Use template** — we'll use a pre-created template to compile the application and avoid reinventing the wheel
+
+   | Input | Value | Notes |
+   | ----- | ----- | ----- |
+   | Template Name | Maven Package | *A reusable template for building the application with Maven* |
 
    - Select the template and press **Use Template,** then provide a name for that template
 
@@ -85,13 +97,14 @@ This lab establishes the starting point of the software delivery lifecycle and e
 
    | Input | Value | Notes |
    | ----- | ----- | ----- |
-   | Name  |Push to Harness AR | |
-   | Registry Type | Artifact Registry | |
-   | Registry | har-<your_project_id> | *Replace with your actual Harness project ID (e.g., har-1234567890)* |
-   | Tags | <+variable.username>-<+pipeline.sequenceId> | *This will be the tag of the image using harness expressions. Click on the pin and select expression and paste the value* |
+   | Name  | Push to Dockerhub | |
+   | Registry Type | Third-Party Artifact Registry | |
+   | Docker Connector | dockerhub | |
+   | Docker Repository | nikpap/harness-workshop | |
+   | Tags | <+variable.username>-<+pipeline.sequenceId> | *Click on the pin icon, select **Expression**, and paste the value* |
    | **Optional Configuration** | | |
-   | Dockerfile | /harness/frontend-app/harness-webapp/Dockerfile |  *This tells harness where is the Dockerfile for building the app* |
-   | Context | /harness/frontend-app/harness-webapp | *This tells from where to run the instructions included in the dockerfile* |
+   | Dockerfile | /harness/frontend-app/Dockerfile | *Points Harness to the frontend Dockerfile* |
+   | Context | /harness/frontend-app | *The build context for the Dockerfile instructions* |
 
    - Click **Apply Changes** to close the config dialog
 
@@ -99,13 +112,15 @@ This lab establishes the starting point of the software delivery lifecycle and e
 
    | Input | Value | Notes |
    | ----- | ----- | ----- |
-   | Branch Name | main | *This is prepopulated* |
-
-</details>
+   | Branch Name | spring | *This is prepopulated* |
 
 ---
 
-# Lab 1 - Continuous Deployment - Frontend
+# Lab 2 - DevSecOps
+
+---
+
+# Lab 3 - Continuous Deployment - Frontend
 
 ## Summary: 
 Our application compiled successfully and the artifact is in the Harness Artifact Registry. Time to deploy it. Extend the pipeline to ship the frontend to a Kubernetes cluster using a rolling deployment. The manifests are ready, no manual kubectl commands, no deployment scripts to maintain, just point Harness at your manifests and let it handle the rest.
@@ -188,7 +203,7 @@ This lab demonstrates how teams can quickly and easily deploy software without c
 ![Add the environment](images/lab2-frontend-env.gif "Add Environment")
 
 ---
-# Lab 2 - Continuous Deployment - Backend
+# Lab 4 - Continuous Deployment - Backend
 
 ## Summary
 Frontend is done. Now for the backend, where things can actually break in expensive ways. Let's use a canary deployment strategy with a manual approval before a broad rollout in order to minimize the blast radius. Deploy to a small slice of traffic, verify the canary is healthy, then promote to everyone. Progressive delivery made easy. 
@@ -269,7 +284,7 @@ This lab validates Harness’s ability to safely deploy changes to production us
 
 ---
 
-# Lab 3 - Artifact Registry
+# Lab 5 - Artifact Registry
 
 ## Summary
 This lab focuses on managing and securing your container images through Harness Artifact Registry. You'll learn how to configure your registries to automatically scan images for vulnerabilities, pull images from the registry, and leverage upstream proxies to control images pulled from public repositories. 
@@ -327,7 +342,7 @@ From a developer experience perspective, developers have a single URL to use for
 **6.** After the scan pipeline has finished, navigate back to _Artifact Registry --> Artifacts --> (Expand) **harness-workshop:latest** --> click on the digest hyperlink._ You should see the scan results under the "Vulnerabilities" tab. _Extra Credit: while you're here, take a look at the SBOM tab to understand the composition of the artifact we built, including the open source dependencies._
 
 ---
-# Lab 4 - Policy, Governance & Change Management
+# Lab 6 - Policy, Governance & Change Management
 
 ## Summary
 You've built a pipeline that builds, tests, and deploys your frontend and backend services. Now the compliance team wants a word. In regulated environments, you can't just ship code to production without following change compliance policies and maintaining an audit trail for traceability. In this lab, we'll enforce governance with Policy-as-Code, ensuring every pipeline has an approval gate, and integrate with ServiceNow for automated change management. Compliance as code, not compliance as bottleneck.
@@ -412,7 +427,7 @@ This lab proves that governance does not have to be manual, inconsistent, or slo
 
 ---
 
-# Lab 5 - Continuous Verification
+# Lab 7 - Continuous Verification
 
 ## Summary
 Canary deployments are great, but how do you know the canary is actually healthy? Continuous verification integrates with your observability tools and uses ML to compare metrics and logs against the baseline in real-time. No manual dashboard watching required. We'll also add chaos experiments to stress-test the deployment. If the canary survives intentional chaos, it's ready for production.
@@ -463,7 +478,7 @@ This lab validates how Harness detects deployment issues based on real system be
 
 ---
 
-# Lab 6 - Release Validation & Automatic Rollback
+# Lab 8 - Release Validation & Automatic Rollback
 
 ## Summary
 This is where it all comes together. Watch the entire delivery pipeline flow from commit to production: multi-service deployments, automated change management with ServiceNow approvals, canary deployments validated by ML-powered verification, and chaos experiments checking the resiliency of your release. If something breaks, the pipeline rolls back automatically. No war rooms, only pizza parties.
@@ -537,7 +552,7 @@ This lab demonstrates the full power of a modern CD platform by combining multip
 
 ---
 
-# Lab 7 - Automated Security Standards Enforcement
+# Lab 9 - Automated Security Standards Enforcement
 
 ## Summary
 Honor system enforcement of security scans is great. Automated enforcement of security scans and blocking bad deployments is better. Using policy-as-code OPA policies, ensure all deployments are scanned for vulnerabilities and automatically turn vulnerability findings into hard stops to ensure critical CVEs never reach production.
@@ -595,7 +610,7 @@ This lab demonstrates how to enforce security standards automatically across you
 
 ---
 
-# Lab 8 - Enhanced Change Management Automation
+# Lab 10 - Enhanced Change Management Automation
 
 ## Summary
 Close the loop on failed releases. Configure rollback steps that automatically update ServiceNow when deployments fail.

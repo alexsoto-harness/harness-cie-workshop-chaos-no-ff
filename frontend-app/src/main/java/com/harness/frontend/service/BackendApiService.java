@@ -7,7 +7,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.Map;
 
 @Service
-public class BackendApiService {
+public class BackendApiService implements BackendApi {
 
     private final RestTemplate restTemplate;
     private final String backendUrl;
