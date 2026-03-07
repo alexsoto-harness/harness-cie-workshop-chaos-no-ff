@@ -1,0 +1,33 @@
+name: <+service.name>
+replicas: 3
+
+image: <+artifact.image>
+dockercfg: <+artifact.imagePullSecret>
+
+sename: <+env.name>
+
+serviceType: ClusterIP
+servicePort: 80
+serviceTargetPort: 8000
+
+# Resources
+resources:
+  requests:
+    memory: "256Mi"
+    cpu: "250m"
+  limits:
+    memory: "512Mi"
+    cpu: "500m"
+
+env:
+  config:
+    HARNESS_BUILD: <+pipeline.sequenceId>
+    SERVICE_NAME: <+service.name>
+    APPLICATION_VERSION: <+artifacts.primary.tag>
+    LAST_EXECUTION_ID: <+pipeline.sequenceId>
+
+# Optional sections
+# env.secrets:
+#   SECRET_KEY: secret_value
+# nodeSelector:
+#   kubernetes.io/os: linux

@@ -52,7 +52,16 @@ If your artifacts aren't built consistently, nothing downstream matters. This la
    | Clone Codebase | Enabled | *The codebase will be cloned automatically* |
    | Repository Name | harnessrepo | |
 
-**6.** There are **two** main tabs that need configuration:
+**6.** There are **three** main tabs that need configuration:
+
+   ### Overview
+
+   Under **Cache Intelligence**, expand **Advanced (Optional)** and configure:
+
+   | Input | Value | Notes |
+   | ----- | ----- | ----- |
+   | Paths | /harness/frontend-app/.m2/repository | *Path for the Maven repository cache* |
+   | Key | maven-cache | *A unique key to identify this cache entry* |
 
    ### Infrastructure
 
@@ -118,12 +127,46 @@ If your artifacts aren't built consistently, nothing downstream matters. This la
 
 # Lab 2 - DevSecOps
 
+## Summary
+Security shouldn't be an afterthought, it should be baked right into your pipeline. In this lab, you'll integrate **Sonarqube**, **Veracode**, and **Kodem** security scans into your CI pipeline using reusable templates provided by your security team. No security expertise required on your end, just plug in the templates and let the scanners do the heavy lifting.
+
+## Objectives
+
+- Integrate security scanning into your CI pipeline using reusable templates
+- Understand how governance policies enforce security standards in the path to production
+- Review deduplicated, normalized vulnerability findings across multiple scanners
+
+## Why It Matters
+Shifting security left means catching vulnerabilities before they ever reach production, not scrambling to fix them after the fact. This lab shows how reusable templates make DevSecOps practices easy to adopt, and how governance policies ensure no one skips the security checks. Secure by default, not by accident.
+
+## Steps
+
+![](https://lh7-us.googleusercontent.com/docsz/AD_4nXcLr5TGcKRWOjVgB_sCAHHEeLPyd6EBdnkt2-mq_imTkZbQMEwJD03Q1wZyhWqHxoCNIIYWJWlRbnZrvZn2pPYIwTzXlOGdhMDEgn-J2JnK7lVastmfpdwTqDHXjpP0DK3TgU1gM-Ec_0iZLicWV7KpgW2FdXUCcAtraDGaEz8hI3dpWGLXkg?key=cRG2cvp_PHVW0KG2Gq6Y_A)
+
+**1.** In the existing pipeline, within the Build stage **before** the **Push to Dockerhub** step, click the **+** icon to add a new step
+
+**2.** Select **Use template**
+
+![](https://lh7-us.googleusercontent.com/docsz/AD_4nXeC5rTVxlk7DeZeU_cINwcKo6Nf2wVW9brQ9MiCEfppJwmU-uH3QcNZ53qTxhur57KeySksoDBg9EqjhgKOgAEDKon6iNz9cFxozBe9VZssV-t77VNo6t1zPUvm6e2NOZJDKncxd9c2GM4HE-h-L4cIOl4u6Uqx_azoKchMdg?key=cRG2cvp_PHVW0KG2Gq6Y_A)
+
+**3.** Select **Sonarqube** and name the step **Sonarqube**
+
+**4.** Repeat the process for **Veracode** and **Kodem** — but this time, add them **in parallel** instead of in series. Hover under the **Sonarqube** step and click the **+** icon to add each one as a parallel step. Name them **Veracode** and **Kodem** respectively.
+
+**5.** Click **Save** and then click **Run** to execute the pipeline with the following inputs
+
+   | Input | Value | Notes |
+   | ----- | ----- | ----- |
+   | Branch Name | spring | |
+
+**6.** After the **Build and Push** stage is complete, go to the **Security Tests** tab to see the deduplicated, normalized, and prioritized list of vulnerabilities discovered across your scanners.
+
 ---
 
 # Lab 3 - Continuous Deployment - Frontend
 
 ## Summary: 
-Our application compiled successfully and the artifact is in the Harness Artifact Registry. Time to deploy it. Extend the pipeline to ship the frontend to a Kubernetes cluster using a rolling deployment. The manifests are ready, no manual kubectl commands, no deployment scripts to maintain, just point Harness at your manifests and let it handle the rest.
+Our application compiled successfully and the artifact is in Dockerhub. Time to deploy it. Extend the pipeline to ship the frontend to a Kubernetes cluster using a rolling deployment. The manifests are ready, no manual kubectl commands, no deployment scripts to maintain, just point Harness at your manifests and let it handle the rest.
 
 ## Objectives
 
@@ -136,22 +179,19 @@ Our application compiled successfully and the artifact is in the Harness Artifac
 This lab demonstrates how teams can quickly and easily deploy software without custom scripting, leveraging native rolling deployment capabilities. The lab goes under the hood to show what teams deploy (the Harness Service) and where they deploy it (the Harness Environment) are decoupled from the deployment logic defined in the pipeline. This decoupled architecture unlocks pipeline standardization at scale. 
 
 ## Steps
-**1.** From the Unified View left navigation bar, navigate to **Projects** → **Select the project available**
 
-![](https://lh7-us.googleusercontent.com/docsz/AD_4nXfhuMykMsIHl-7FjliWssHc0uwRpdLdrnq7GkGAI0g6UBZM69F1zpQ8ZA8N_vMqjpoGFYFR_weJk7OtOGGa2bksIaS6BlktwytmuJ1THM3e8O6tDT18HYWwFyGUye8ubsrHBChI8ORrCQ88JcKWpLjQ0DsXDS0NSZrkfZ4RUQ?key=cRG2cvp_PHVW0KG2Gq6Y_A)
+**1.** In the Pipeline Studio, add a Deployment stage by clicking **Add Stage** and select **Deploy** as the Stage Type.
 
-**2.** In the Pipeline Studio, add a Deployment stage by clicking **Add Stage** and select **Deploy** as the Stage Type.
-
-**3.** Enter the following values and click on **Set Up Stage**
+**2.** Enter the following values and click on **Set Up Stage**
 
    | Input | Value | Notes |
    | ----- | ----- | ----- |
-   | Stage Name | frontend | |
+   | Stage Name | Frontend Deployment | |
    | Deployment Type | Kubernetes | |
 
 ![Click on the plus icon to add a new stage](images/lab2-deploy-stage.gif "Add Stage")
 
-**4.** Configure the **frontend** Stage with the following
+**3.** Configure the **frontend** Stage with the following
 
    ### Service
 
@@ -159,21 +199,21 @@ This lab demonstrates how teams can quickly and easily deploy software without c
 
    | Input | Value | Notes |
    | ----- | ----- | ----- |
-   | Name | frontend | |
+   | Name | frontend | _This is preselected for you based on the Stage type_|
    | Deployment Type | Kubernetes | |
    | **Add Manifest** | | |
    | Manifest Type | K8s Manifest | |
    | K8s Manifest Store | Code | |
    | Manifest Identifier | templates | |
    | Repository | harnessrepo | |
-   | Branch | main | |
-   | File/Folder Path | harness-deploy/frontend/manifests | |
-   | Values.yaml | harness-deploy/frontend/values.yaml | _Click **Submit** to go back and continue configuration of the artifact source_ |
+   | Branch | spring | |
+   | File/Folder Path | harness-deploy/frontend/ocp/manifests | |
+   | Values.yaml | harness-deploy/frontend/ocp/values.yaml | _Click **Submit** to go back and continue configuration of the artifact source_ |
    | **Add Artifact Source** | | |
-   | Artifact Repository Type | Artifact Registry | |
-   | Artifact Source Identifier |frontend | |
-   | Registry | har-<your_project_id> | |
-   | Image Name | harness-workshop | |
+   | Artifact Repository Type | Docker Registry | |
+   | Docker Registry Connector | dockerhub | |
+   | Artifact Source Identifier | frontend | |
+   | Image Path | nikpap/harness-workshop | |
    | Tag | <+variable.username>-<+pipeline.sequenceId> | _Click on the purple "**Sigma**" icon to the right of the text box. A "Learn More" pop up will appear and block your view, click the "**x**" to exit it. Then select **Expression** from the dropdown and paste the value._ |
 
    - Click **Save** to close the service window and then click **Continue** to go to the Environment tab
@@ -190,7 +230,7 @@ This lab demonstrates how teams can quickly and easily deploy software without c
 
    - Click **- Select -** on the **"Specify Infrastructure"** input box
 
-   -  From the dropdown select **k8s** and click **"Apply Selected"**
+   -  From the dropdown select **ROSA** and click **"Apply Selected"**
 
    - Click **Continue** 
 
@@ -210,11 +250,11 @@ Frontend is done. Now for the backend, where things can actually break in expens
 
 ## Objectives
 - Extend the pipeline with multiple deployment stages for different services
-- Implement advanced deployment strategies to reduce blast radius of a release
+- Implement advanced deployment strategies to reduce blast radius of a failed release
 - Add manual approval gates and keep the human in the loop for controlled production releases
 
 ## Why It Matters
-This lab validates Harness’s ability to safely deploy changes to production using advanced deployment strategies. Participants experience how risk is reduced through progressive delivery and manual validation — without complex scripting.
+This lab validates Harness’s ability to safely deploy changes to production using advanced deployment strategies. Participants experience how risk is reduced through progressive delivery and manual validation, without complex scripting.
 ## Steps
 **1.** In the existing pipeline, add a Deployment stage by clicking **Add Stage** and select **Deploy** as the Stage Type
 
@@ -222,7 +262,7 @@ This lab validates Harness’s ability to safely deploy changes to production us
 
    | Input | Value | Notes |
    | ----- | ----- | ----- |
-   | Stage Name | backend | |
+   | Stage Name | Backend Deploy | |
    | Deployment Type | Kubernetes | |
 
 **3.** Configure the **backend** Stage with the following
@@ -240,7 +280,7 @@ This lab validates Harness’s ability to safely deploy changes to production us
 
    - Click **- Select -** on the **"Specify Infrastructure"** input box
 
-   -  From the dropdown select **k8s** and click **"Apply Selected"**
+   -  From the dropdown select **ROSA** and click **"Apply Selected"**
 
    - Click **Continue** 
 
@@ -263,12 +303,12 @@ This lab validates Harness’s ability to safely deploy changes to production us
 
 > **Bonus**: save your inputs as an Input Set before executing
 
-   | Input       | Value | Notes       |
-   | ----------- | ----- | ----------- |
-   | backend_version | backend-v1 | _Leave as is_ |
-   | Branch Name |main| _Leave as is_ |
-   | Stage: frontend | frontend | _Leave as is_ |
-   | Stage: backend | backend | _Leave as is_ |
+   | Section | Input | Value | Notes |
+   | ------- | ----- | ----- | ----- |
+   | CI Codebase | Branch Name | spring | _Leave as is_ |
+   | Stage: Frontend Deploy | Service > Primary Artifact | frontend | _Leave as is_ |
+   | Stage: Backend Deploy | Service > Primary Artifact | backend | _Leave as is_ |
+   | Stage: Backend Deploy | Service > Tag | backend-v1 | |
 
 ![Canary Deployment](images/lab3-canary.gif "Canary Deployment")
 
