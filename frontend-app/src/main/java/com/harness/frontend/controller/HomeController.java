@@ -24,13 +24,13 @@ public class HomeController {
     public String home(Model model) {
         try {
             Map<String, Object> details = backendApiService.getExecutionDetails();
-            model.addAttribute("serviceName", details.getOrDefault("service_name", "Harness Webinar"));
+            model.addAttribute("serviceName", details.getOrDefault("service_name", "Harness Workshop"));
             model.addAttribute("lastExecution", details.getOrDefault("last_execution_id", "12.3"));
             model.addAttribute("applicationVersion", details.getOrDefault("application_version", "v1.0"));
             model.addAttribute("deploymentType", details.getOrDefault("deployment_type", "normal"));
             model.addAttribute("isCanary", "canary".equals(details.get("deployment_type")));
         } catch (Exception e) {
-            model.addAttribute("serviceName", "Harness Webinar");
+            model.addAttribute("serviceName", "Harness Workshop");
             model.addAttribute("lastExecution", "12.3");
             model.addAttribute("applicationVersion", "v1.0");
             model.addAttribute("deploymentType", "normal");

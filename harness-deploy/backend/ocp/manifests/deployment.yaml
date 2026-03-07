@@ -116,15 +116,15 @@ spec:
 {{ toYaml .Values.resources | indent 12 }}
           readinessProbe:
             httpGet:
-              path: /actuator/health
+              path: /deploy/execution
               port: {{.Values.serviceTargetPort}}
-            initialDelaySeconds: 15
+            initialDelaySeconds: 10
             periodSeconds: 10
           livenessProbe:
             httpGet:
-              path: /actuator/health
+              path: /deploy/execution
               port: {{.Values.serviceTargetPort}}
-            initialDelaySeconds: 30
+            initialDelaySeconds: 15
             periodSeconds: 10
       {{- if .Values.nodeSelector}}
       nodeSelector:

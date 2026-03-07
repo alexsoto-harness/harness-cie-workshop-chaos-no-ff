@@ -89,7 +89,7 @@
       fetch('/api/execution')
         .then(r => r.json())
         .then(data => {
-          document.querySelector('.heading').textContent = data.service_name || 'Harness Webinar';
+          document.querySelector('.heading').textContent = data.service_name || 'Harness Workshop';
           const versions = document.querySelectorAll('.location');
           if (versions[0]) versions[0].textContent = data.application_version || 'v1.0';
           if (versions[1]) versions[1].textContent = data.last_execution_id || '12.3';

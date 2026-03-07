@@ -308,7 +308,7 @@ This lab validates Harness’s ability to safely deploy changes to production us
    | CI Codebase | Branch Name | spring | _Leave as is_ |
    | Stage: Frontend Deploy | Service > Primary Artifact | frontend | _Leave as is_ |
    | Stage: Backend Deploy | Service > Primary Artifact | backend | _Leave as is_ |
-   | Stage: Backend Deploy | Service > Tag | backend-v1 | |
+   | Stage: Backend Deploy | Service > Tag | backend-v1 | _Should be prepopulated for you_|
 
 ![Canary Deployment](images/lab3-canary.gif "Canary Deployment")
 

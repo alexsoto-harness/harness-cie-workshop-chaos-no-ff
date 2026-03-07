@@ -133,7 +133,7 @@ class HomeControllerTest {
     void homeReturnsFallbackServiceNameOnError() {
         when(backendApiService.getExecutionDetails()).thenThrow(new RuntimeException("Backend down"));
         controller.home(model);
-        assertEquals("Harness Webinar", model.getAttribute("serviceName"));
+        assertEquals("Harness Workshop", model.getAttribute("serviceName"));
     }
 
     @Test
@@ -170,7 +170,7 @@ class HomeControllerTest {
     void homeDefaultsServiceNameWhenMissing() {
         when(backendApiService.getExecutionDetails()).thenReturn(Map.of("deployment_type", "normal"));
         controller.home(model);
-        assertEquals("Harness Webinar", model.getAttribute("serviceName"));
+        assertEquals("Harness Workshop", model.getAttribute("serviceName"));
     }
 
     @Test
