@@ -19,10 +19,6 @@
             <!-- Canary view -->
             <div th:if="${isCanary}" class="wrapper"
                  style="background: url('/assets/canary-standing.png'); height: 600px;">
-              <div class="mynav">
-                <a href="javascript:;"><span class="lnr lnr-chevron-left"></span></a>
-                <a href="javascript:;"><span class="lnr lnr-cog"></span></a>
-              </div>
               <h1 class="heading" style="color: rgb(28, 198, 28);" th:text="${serviceName}">Service</h1>
               <div class="weather-card"
                    style="background-color: rgba(58, 133, 218, 0.758); margin-top:200px; height: 100px; width: 350px;">
@@ -39,10 +35,6 @@
             <!-- Normal view -->
             <div th:unless="${isCanary}" class="wrapper"
                  style="background: linear-gradient(to bottom, black, rgba(0, 34, 128, 0.598) 50%, black); height: 600px;">
-              <div class="mynav">
-                <a href="javascript:;"><span class="lnr lnr-chevron-left"></span></a>
-                <a href="javascript:;"><span class="lnr lnr-cog"></span></a>
-              </div>
               <h1 class="heading" style="color: #FFFFFF" th:text="${serviceName}">Service</h1>
               <div class="weather-card" style="background-color: #ffffff20; height: 100px; width: 350px;">
                 <h1 class="heading" style="font-size: 20px; color: #FFFFFF">Version</h1>
@@ -67,10 +59,6 @@
         <div class="weather-card rain" style="background-color: black;">
           <div class="top">
             <div class="wrapper">
-              <div class="mynav">
-                <a href="javascript:;"><span class="lnr lnr-chevron-left"></span></a>
-                <a href="javascript:;"><span class="lnr lnr-cog"></span></a>
-              </div>
               <h1 class="heading">Distribution Test</h1>
               <h3 class="location">Synthetic Test</h3>
               <p class="temp"></p>
@@ -83,6 +71,8 @@
       </div>
     </div>
   </div>
+
+  <div th:replace="~{fragments/footer :: footer}"></div>
 
   <script>
     document.getElementById('checkReleaseBtn').addEventListener('click', function () {

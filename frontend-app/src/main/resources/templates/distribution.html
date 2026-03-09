@@ -15,10 +15,12 @@
     <div class="row" style="width:200px">
       <div class="col">
         <button class="btn" id="runBtn" style="margin:0;padding:0">
-          <svg xmlns="http://www.w3.org/2000/svg" width="40" height="45" fill="#FFFFFF" class="bi bi-play-btn" viewBox="0 0 16 16">
-            <path d="M6.79 5.093A.5.5 0 0 0 6 5.5v5a.5.5 0 0 0 .79.407l3.5-2.5a.5.5 0 0 0 0-.814z"/>
-            <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm15 0a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1z"/>
-          </svg>
+          <span id="runBtnIcon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="45" fill="#FFFFFF" class="bi bi-play-btn" viewBox="0 0 16 16">
+              <path d="M6.79 5.093A.5.5 0 0 0 6 5.5v5a.5.5 0 0 0 .79.407l3.5-2.5a.5.5 0 0 0 0-.814z"/>
+              <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm15 0a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1z"/>
+            </svg>
+          </span>
         </button>
       </div>
       <div class="col">
@@ -46,6 +48,8 @@
       </div>
     </div>
   </div>
+
+  <div th:replace="~{fragments/footer :: footer}"></div>
 
   <script th:inline="javascript">
     const backendUrl = /*[[${backendUrl}]]*/ 'http://localhost:8000';
@@ -124,9 +128,34 @@
       chart.update();
     }
 
-    function startRun() {
-      if (apiIntervalId) return;
-      apiIntervalId = setInterval(() => {
+    const playSvg = '<svg xmlns="http://www.w3.org/2000/svg" width="40" height="45" fill="#FFFFFF" class="bi bi-play-btn" viewBox="0 0 16 16"><path d="M6.79 5.093A.5.5 0 0 0 6 5.5v5a.5.5 0 0 0 .79.407l3.5-2.5a.5.5 0 0 0 0-.814z"/><path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm15 0a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1z"/></svg>';
+    const stopSvg = '<svg xmlns="http://www.w3.org/2000/svg" width="40" height="45" fill="#FFFFFF" class="bi bi-stop-btn" viewBox="0 0 16 16"><path d="M6.5 5A1.5 1.5 0 0 0 5 6.5v3A1.5 1.5 0 0 0 6.5 11h3A1.5 1.5 0 0 0 11 9.5v-3A1.5 1.5 0 0 0 9.5 5z"/><path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm15 0a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1z"/></svg>';
+
+    function stopRun() {
+      clearInterval(apiIntervalId);
+      clearInterval(refreshIntervalId);
+      if (autoStopTimeout) clearTimeout(autoStopTimeout);
+      apiIntervalId = null;
+      refreshIntervalId = null;
+      autoStopTimeout = null;
+      const btn = document.getElementById('runBtn');
+      btn.classList.remove('running');
+      document.getElementById('runBtnIcon').innerHTML = playSvg;
+      console.log('Stopped');
+    }
+
+    let autoStopTimeout = null;
+
+    function toggleRun() {
+      if (apiIntervalId) {
+        stopRun();
+        return;
+      }
+      const btn = document.getElementById('runBtn');
+      btn.classList.add('running');
+      document.getElementById('runBtnIcon').innerHTML = stopSvg;
+
+      function doApiCall() {
         fetch('/api/create', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -138,22 +167,23 @@
           console.log('API call at', new Date().toISOString());
         })
         .catch(err => console.error('Error:', err));
-      }, 1000);
+      }
 
-      refreshIntervalId = setInterval(refreshChart, 30000);
+      doApiCall();
+      apiIntervalId = setInterval(doApiCall, 1000);
 
-      setTimeout(() => {
-        clearInterval(apiIntervalId);
-        clearInterval(refreshIntervalId);
-        apiIntervalId = null;
-        refreshIntervalId = null;
+      refreshChart();
+      refreshIntervalId = setInterval(refreshChart, 2000);
+
+      autoStopTimeout = setTimeout(() => {
+        stopRun();
         console.log('API calls stopped after 10 minutes');
       }, 10 * 60 * 1000);
     }
 
     document.addEventListener('DOMContentLoaded', () => {
       initChart();
-      document.getElementById('runBtn').addEventListener('click', startRun);
+      document.getElementById('runBtn').addEventListener('click', toggleRun);
       document.getElementById('refreshBtn').addEventListener('click', refreshChart);
     });
   </script>

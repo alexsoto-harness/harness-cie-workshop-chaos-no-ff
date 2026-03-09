@@ -1,5 +1,4 @@
 @import url("https://fonts.googleapis.com/css?family=Montserrat:400,500,600,700,800,900");
-@import url("https://cdn.linearicons.com/free/1.0.0/icon-font.min.css");
 body {
   font-family: 'Montserrat', sans-serif;
   background: #112233;
@@ -32,21 +31,6 @@ body {
   padding: 30px;
   position: relative;
   z-index: 1;
-}
-.weather-card .top .wrapper .mynav {
-  height: 20px;
-}
-.weather-card .top .wrapper .mynav .lnr {
-  color: #fff;
-  font-size: 20px;
-}
-.weather-card .top .wrapper .mynav .lnr-chevron-left {
-  display: inline-block;
-  float: left;
-}
-.weather-card .top .wrapper .mynav .lnr-cog {
-  display: inline-block;
-  float: right;
 }
 .weather-card .top .wrapper .heading {
   margin-top: 20px;
@@ -158,4 +142,30 @@ body {
   background: url("/assets/testing.png") no-repeat;
   background-size: cover;
   background-position: center center;
+}
+
+/* Button interaction styles */
+#runBtn, #refreshBtn {
+  cursor: pointer;
+  transition: transform 0.15s ease, filter 0.15s ease;
+  border-radius: 8px;
+  position: relative;
+}
+#runBtn:hover, #refreshBtn:hover {
+  transform: scale(1.15);
+  filter: brightness(1.4);
+}
+#runBtn:active, #refreshBtn:active {
+  transform: scale(0.92);
+  filter: brightness(0.8);
+}
+#runBtn.running {
+  animation: pulse-glow 1.5s ease-in-out infinite;
+}
+#runBtn.running svg {
+  fill: #4ADE80;
+}
+@keyframes pulse-glow {
+  0%, 100% { filter: drop-shadow(0 0 4px rgba(74, 222, 128, 0.4)); }
+  50% { filter: drop-shadow(0 0 12px rgba(74, 222, 128, 0.9)); }
 }
