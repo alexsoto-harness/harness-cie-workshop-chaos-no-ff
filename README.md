@@ -153,6 +153,8 @@ Shifting security left means catching vulnerabilities before they ever reach pro
 
 **4.** Repeat the process for **Veracode** and **Kodem** — but this time, add them **in parallel** instead of in series. Hover under the **Sonarqube** step and click the **+** icon to add each one as a parallel step. Name them **Veracode** and **Kodem** respectively.
 
+![Build stage with security steps](images/lab2-build-steps.png "Build stage with security steps")
+
 **5.** Click **Save** and then click **Run** to execute the pipeline with the following inputs
 
    | Input | Value | Notes |
@@ -308,78 +310,31 @@ This lab validates Harness’s ability to safely deploy changes to production us
    | CI Codebase | Branch Name | spring | _Leave as is_ |
    | Stage: Frontend Deploy | Service > Primary Artifact | frontend | _Leave as is_ |
    | Stage: Backend Deploy | Service > Primary Artifact | backend | _Leave as is_ |
-   | Stage: Backend Deploy | Service > Tag | backend-v1 | _Should be prepopulated for you_|
+   | Stage: Backend Deploy | Service > Tag | backend-v1 | |
 
 ![Canary Deployment](images/lab3-canary.gif "Canary Deployment")
 
-**5.** While the canary deployment is ongoing and waiting **approval** navigate to the web page and see if you can spot Captain Canary (use the Check Release button to refresh) 
+**5.** While the canary deployment is ongoing and waiting for **approval**, navigate to your deployed application to verify the canary is live.
 
-   | Project | Domain | Suffix |
-   | ------- | ------ | ------ |
-   | http\://<your_project_id> | .cie-bootcamp | .co.uk |
+   - Log in to the ROSA cluster at https://console-openshift-console.apps.rosa.u7s2r6r8i3b3v5k.4qrx.p3.openshiftapps.com/
+
+   - Select **Log in with "powerpay"**
+
+   - Enter your credentials: username is your **project ID**, password is the same one you used to log in to Harness _(refer to the user details spreadsheet provided by your instructor)_
+
+   - Click **Project** from the left-hand sidebar
+
+   - From the **Inventory** box, click **2 Routes**
+
+   - Click the URL in the **Location** column for the **frontend-prod** route
+
+   - See if you can spot Captain Canary _use the **Check Release** button or refresh the page_
+
+![ROSA Login](images/rosa-login.gif "ROSA Login")
 
 ![Canary Deployment](images/canary.png "I see the canary!")
 
-**6.** Approve the canary deployment for the pipeline to complete and go back to the web page and you should see Captain Canary has left as his work here is done.
-
----
-
-# Lab 5 - Artifact Registry
-
-## Summary
-This lab focuses on managing and securing your container images through Harness Artifact Registry. You'll learn how to configure your registries to automatically scan images for vulnerabilities, pull images from the registry, and leverage upstream proxies to control images pulled from public repositories. 
-
-## Objectives
-- Configure artifact registries for vulnerability scanning
-- Set up upstream proxies for secure image pulling
-
-## Why It Matters
-This lab demonstrates how Harness Artifact Registry helps you secure your container images by automatically scanning them for vulnerabilities and providing secure image pulling through upstream proxies, reducing the risk of supply chain attacks.
-
-## Steps
-### Automatically scan images for vulnerabilities
-
-**1.** From the Unified View, navigate to **Artifact Repositories --> Registries** in the left navigation bar
-
-**2.** Click on the **har-<your_project_id>** registry.
-
-**3.** Click the **Configuration** tab at the top to pull up the registry settings.
-
-**4.** Find the **Security** configuration section. Turn on automated image scanning with one click by checking the box next to AquaTrivy.
-
-**5.** Find the **Advanced (Optional)** configuration section and expand it. Notice the Org-level Upstream Proxy that's already been configured for you.
-
-**6.** Click the **Save** button at the top of the page to save your changes.
-
-![Registry Security Scanning](images/lab4-configure-registry-for-scanning.gif "Automated vulnerability scanning")
-
-### Improved developer workflows - easily push and pull images
-
-**1.** From the **har-<your_project_id>** registry, click the Artifacts tab to find the **harness-workshop** image and click on the link to the image. Expand the "-1" version and click on the digest hyperlink. Finally, click the **Set Up Client** button in the upper right corner.
-
-**2.** On **Step 2** of the Docker Client Setup pop-up, click the **Generate Token** link to generate a token you'll use to authenticate to this registry. Paste the key in a text editor that can be referenced later.
-
-![Setup Client](images/lab4-setup-client.gif "Setup Client Wizard")
-
-**3.** Copy the provided Docker configuration commands and run them from your local machine or cloud shell to configure your Docker client to pull the **harness-workshop** image to your machine, re-tag it (e.g., `latest`), and push back to Harness Artifact Registry. E.g.:
-
-```bash
-docker login pkg.harness.io -u <your_workshop_username> -p <your_token>
-docker pull pkg.harness.io/ifg41dwvsnarlovnb2uesg/har-<your_project_id>/harness-workshop:<your_project_id>-1
-docker tag pkg.harness.io/ifg41dwvsnarlovnb2uesg/har-<your_project_id>/harness-workshop:<your_project_id>-1 pkg.harness.io/ifg41dwvsnarlovnb2uesg/har-<your_project_id>/harness-workshop:latest
-docker push pkg.harness.io/ifg41dwvsnarlovnb2uesg/har-<your_project_id>/harness-workshop:latest
-```
-
-**4.** From the Unified View in the left navigation bar, click on **Pipelines** and you should see the Artifact Scan Pipeline running. This will take a couple minutes to complete.
-
-**5.** While the pipeline is running, navigate back to your local machine terminal and pull an image that's publicly available on Docker Hub. Use the same URL from the previous Set Up Client wizard, substituting your public image for _harness-workshop:<tag>_. E.g.:
-
-```bash
-docker pull pkg.harness.io/ifg41dwvsnarlovnb2uesg/har-<your_project_id>/alpine:latest
-```
-From a developer experience perspective, developers have a single URL to use for any artifact they want to store or retrieve - public or private - reducing cognitive load and simplifying artifact management.
-
-**6.** After the scan pipeline has finished, navigate back to _Artifact Registry --> Artifacts --> (Expand) **harness-workshop:latest** --> click on the digest hyperlink._ You should see the scan results under the "Vulnerabilities" tab. _Extra Credit: while you're here, take a look at the SBOM tab to understand the composition of the artifact we built, including the open source dependencies._
+**6.** Approve the canary deployment for the pipeline to complete and go back to your app. You should see Captain Canary has left as his work here is done.
 
 ---
 # Lab 6 - Policy, Governance & Change Management
@@ -455,7 +410,7 @@ This lab proves that governance does not have to be manual, inconsistent, or slo
 
 **6.** Click on the **Overview** toggle to see the steps in this template. 
 
-**7.** Click on the **Create Ticket** or **Approval** steps to see how they are configured and notice how you, as a template user, cannot change the configuration for this enterprise-approved template — only the template administrator can make changes. Click the **X** or **Discard** once you're done reviewing.
+**7.** Click on the **Create Ticket** or **Approval** steps to see how they are configured and notice how you, as a template user, cannot change the configuration for this enterprise-approved template, only the template administrator can make changes. Click the **X** or **Discard** once you're done reviewing.
 
 > **Note:** Notice the use of Harness Expressions to dynamically populate our tickets and approvals.
 
@@ -478,7 +433,7 @@ Canary deployments are great, but how do you know the canary is actually healthy
 - Automate go/no-go decisions based on real-time observability data
 
 ## Why It Matters
-This lab validates how Harness detects deployment issues based on real system behavior, not just pipeline success. Participants experience how deployments are continuously verified using telemetry + AI/ML, enabling faster detection and rollback of bad releases before they impact users, eliminating the need for manual monitoring, and reducing time-to-market.
+This lab validates how Harness detects deployment issues based on real system behavior, not just pipeline success. Participants experience how deployments are continuously verified using telemetry + AI/ML, enabling faster detection and rollback of bad releases before they impact users, eliminating the need for manual monitoring, and reducing mean time to resolution.
 
 ## Steps
 **1.** Click on the **backend** deployment stage and hover over the **Approval** step. Delete it by clicking the **x**. We no longer need a manual approval since we will add automated deployment validation next.
@@ -535,16 +490,16 @@ This lab demonstrates the full power of a modern CD platform by combining multip
 ## Steps
 **1.** First, we need to deploy a new version of our backend to the canary environment so we can demonstrate how to rollback a failed release. Click the **Run** button in the upper right corner to execute the pipeline but this time, select the backend-v2 in the dropdown box that pops up.
 
-   | Input | Value | Notes |
-   | ----- | ----- | ----- |
-   | backend_version | backend-v2 | _Update from v1 to v2_ |
-   | Branch Name | main | _Leave as is_ |
-   | Stage: frontend | frontend | _Leave as is_ |
-   | Stage: backend | backend | _Leave as is_ |
+   | Section | Input | Value | Notes |
+   | ------- | ----- | ----- | ----- |
+   | CI Codebase | Branch Name | spring | _Leave as is_ |
+   | Stage: Frontend Deploy | Service > Primary Artifact | frontend | _Leave as is_ |
+   | Stage: Backend Deploy | Service > Primary Artifact | backend | _Leave as is_ |
+   | Stage: Backend Deploy | Service > Tag | backend-v2 | _Update from v1 to v2_ |
 
-![Select backend-v2](images/lab7-pick-v2.png "Select backend-v2")
+![Select backend-v2](images/lab7-pick-backend-v2.png "Select backend-v2")
 
-**2.** The pipeline will eventually pause on the ServiceNow Approval stage. At this point, the orchestration pipeline automatically created the SNOW change record on behalf of you (the developer) and updated the ticket with the details needed for a release. No manual change records to maintain by the developer - everything is automated. Next, let's simulate a release manager signing off on the implementation.
+**2.** The pipeline will eventually pause on the ServiceNow Approval stage. At this point, the orchestration pipeline automatically created the SNOW change record on your behalf (the developer) and updated the ticket with the details needed for a release. No manual change records to maintain by the developer, everything is automated. Next, let's simulate a release manager signing off on the implementation.
 
 - Click on the **ServiceNow Approval** stage, click on the **Approval** step, and click on the change record hyperlink in the step details on the right to open the change record in a new tab.
 
@@ -552,11 +507,7 @@ This lab demonstrates the full power of a modern CD platform by combining multip
 
 ![ServiceNow Approval](images/lab7-snow-approval.gif "ServiceNow Approval")
 
-**3.** As the pipeline progresses to the backend deployment, navigate to the web page and see if you can spot the canary (use the check release button). 
-
-   | project                | domain        | suffix |
-   | ---------------------- | ------------- | ------ |
-   | http\://\<project\_id> | .cie-bootcamp | .co.uk |
+**3.** As the pipeline progresses to the backend deployment, navigate back to your app and see if you can spot the canary (use the check release button or refresh the page).
 
 - Validate that we've deployed the new version in the canary by checking the version is **backend-v2** and the Last Execution matches the **build Id** of your pipeline
 
