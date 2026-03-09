@@ -8,3 +8,9 @@ dist/
 *.log
 .vscode/
 TO-DO.md
+
+# Playwright
+automation/playwright/node_modules/
+automation/playwright/playwright-report/
+automation/playwright/test-results/
+automation/playwright/results/

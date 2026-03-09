@@ -1,0 +1,53 @@
+pipeline:
+  name: pw
+  identifier: pw
+  projectIdentifier: clab343ip1
+  orgIdentifier: clab343org
+  tags: {}
+  properties:
+    ci:
+      codebase:
+        repoName: harnessrepo
+        build: <+input>
+  stages:
+    - stage:
+        name: Playwright E2E Tests
+        identifier: Playwright_E2E_Tests
+        description: "Run Playwright end-to-end tests against the frontend"
+        type: CI
+        spec:
+          cloneCodebase: true
+          platform:
+            os: Linux
+            arch: Amd64
+          runtime:
+            type: Cloud
+            spec: {}
+          execution:
+            steps:
+              - step:
+                  type: Run
+                  name: Install and Run Playwright Tests
+                  identifier: run_playwright_tests
+                  spec:
+                    connectorRef: dockerhub
+                    image: mcr.microsoft.com/playwright:v1.50.0-noble
+                    shell: Sh
+                    command: |-
+                      cd automation/playwright
+                      npm ci
+                      npx playwright test --reporter=list,junit
+                    envVariables:
+                      BASE_URL: <+variable.base_url>
+                      PLAYWRIGHT_JUNIT_OUTPUT_NAME: /harness/automation/playwright/results/junit-results.xml
+                    reports:
+                      type: JUnit
+                      spec:
+                        paths:
+                          - automation/playwright/results/junit-results.xml
+  variables:
+    - name: base_url
+      type: String
+      description: "Target URL for Playwright tests"
+      required: false
+      value: http://localhost:4000

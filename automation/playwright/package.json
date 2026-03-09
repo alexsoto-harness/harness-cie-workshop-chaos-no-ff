@@ -1,0 +1,13 @@
+{
+  "name": "harness-frontend-playwright-tests",
+  "version": "1.0.0",
+  "description": "Playwright E2E tests for the Harness Workshop frontend",
+  "scripts": {
+    "test": "npx playwright test",
+    "test:headed": "npx playwright test --headed",
+    "test:report": "npx playwright show-report"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.50.0"
+  }
+}
