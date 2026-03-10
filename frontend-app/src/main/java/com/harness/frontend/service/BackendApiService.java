@@ -1,9 +1,11 @@
 package com.harness.frontend.service;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.net.HttpURLConnection;
 import java.util.Map;
 
 @Service
@@ -14,7 +16,14 @@ public class BackendApiService implements BackendApi {
 
     public BackendApiService(@Value("${backend.api.url}") String backendUrl) {
         this.backendUrl = backendUrl;
-        this.restTemplate = new RestTemplate();
+        SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory() {
+            @Override
+            protected void prepareConnection(HttpURLConnection connection, String httpMethod) throws java.io.IOException {
+                super.prepareConnection(connection, httpMethod);
+                connection.setRequestProperty("Connection", "close");
+            }
+        };
+        this.restTemplate = new RestTemplate(factory);
     }
 
     @SuppressWarnings("unchecked")
