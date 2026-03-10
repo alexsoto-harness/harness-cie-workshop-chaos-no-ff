@@ -14,3 +14,4 @@ automation/playwright/node_modules/
 automation/playwright/playwright-report/
 automation/playwright/test-results/
 automation/playwright/results/
+automation/playwright/pw.yaml

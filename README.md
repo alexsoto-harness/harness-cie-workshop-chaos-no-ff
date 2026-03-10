@@ -166,7 +166,7 @@ Shifting security left means catching vulnerabilities before they ever reach pro
 # Lab 3 - Continuous Deployment - Frontend
 
 ## Summary
-Our application compiled successfully and the artifact is in Dockerhub. Time to deploy it. Extend the pipeline to ship the frontend to a Kubernetes cluster using a rolling deployment. The manifests are ready, no manual kubectl commands, no deployment scripts to maintain, just point Harness at your manifests and let it handle the rest.
+Our application compiled successfully and the artifact is in Dockerhub. Time to deploy it. Extend the pipeline to ship the frontend to a Kubernetes cluster using a rolling deployment. The manifests are ready, no manual kubectl commands, no deployment scripts to maintain, just point Harness at your manifests and let it handle the rest. We'll also wire in automated end-to-end tests that run right after the deployment, so we know the frontend is actually working before we move on.
 
 ## Objectives
 
@@ -174,9 +174,10 @@ Our application compiled successfully and the artifact is in Dockerhub. Time to 
 - Define Kubernetes services with manifests and artifact sources
 - Use Harness expressions for dynamic artifact tagging
 - Implement rolling deployment strategies
+- Add automated end-to-end tests as a post-deployment validation step
 
 ## Why It Matters
-This lab demonstrates how teams can quickly and easily deploy software without custom scripting, leveraging native rolling deployment capabilities. The lab goes under the hood to show what teams deploy (the Harness Service) and where they deploy it (the Harness Environment) are decoupled from the deployment logic defined in the pipeline. This decoupled architecture unlocks pipeline standardization at scale. 
+This lab demonstrates how teams can quickly and easily deploy software without custom scripting, leveraging native rolling deployment capabilities. The lab goes under the hood to show what teams deploy (the Harness Service) and where they deploy it (the Harness Environment) are decoupled from the deployment logic defined in the pipeline. This decoupled architecture unlocks pipeline standardization at scale. By adding end-to-end tests as a post-deployment step, participants see how QA testing can be automated and templatized, giving teams confidence that what they just shipped actually works.
 
 ## Steps
 
@@ -218,7 +219,7 @@ This lab demonstrates how teams can quickly and easily deploy software without c
 
    - Click **Save** to close the service window and then click **Continue** to go to the Environment tab
 
-![Create the frontend service](images/lab3-frontend-svc-har.gif "Create Service")
+![Create the frontend service](images/lab3-frontend-svc.gif "Create Service")
 
    ### Environment
 
@@ -242,20 +243,46 @@ This lab demonstrates how teams can quickly and easily deploy software without c
 
 ![Add the environment](images/lab3-frontend-env.gif "Add Environment")
 
+   ### Playwright E2E Tests
+
+   Now that the frontend deployment is configured, let's add automated end-to-end tests that validate the application is working after every deployment. Your QA team has packaged a Playwright test suite into a reusable template, so you don't need to write any tests yourself, just plug it in.
+
+   - In the **Frontend Deployment** stage, click on the **+** icon after the Rolling Update step to add a new step
+
+   - Select **Use Template**
+
+   - Select **Playwright E2E Tests** and click **Use Template** at the bottom right
+
+   - Configure with the following values:
+
+   | Input | Value | Notes |
+   | ----- | ----- | ----- |
+   | Name | Playwright Tests | |
+   | BASE_URL | `https://frontend-prod-<your-project-id>-ns.apps.rosa.u7s2r6r8i3b3v5k.4qrx.p3.openshiftapps.com/` | _Replace `<your-project-id>` with your project ID. Click the purple **Sigma** button and select **Expression**_ |
+
+   - Click **Apply Changes**
+
+   - **Save** the pipeline.
+
+![Add Playwright Tests](images/lab3-playwright-setup.gif "Add Playwright Tests")
+
+> **Note:** The Playwright template runs browser-based tests against your deployed frontend, checking that the navbar, navigation, buttons, and page content are all rendering correctly. The test results are captured as output variables that can be referenced anywhere else in the pipeline.
+
 ---
 
 # Lab 4 - Continuous Deployment - Backend
 
 ## Summary
-Frontend is done. Now for the backend, where things can actually break in expensive ways. Let's use a canary deployment strategy with a manual approval before a broad rollout in order to minimize the blast radius. Deploy to a small slice of traffic, verify the canary is healthy, then promote to everyone. Progressive delivery made easy. 
+Frontend is done. Now for the backend, where things can actually break in expensive ways. Let's use a canary deployment strategy with a manual approval before a broad rollout in order to minimize the blast radius. Deploy to a small slice of traffic, verify the canary is healthy, then promote to everyone. Progressive delivery made easy. Along the way, we'll review the results of our Playwright E2E tests from the frontend stage to see how automated QA testing works in practice.
 
 ## Objectives
 - Extend the pipeline with multiple deployment stages for different services
 - Implement advanced deployment strategies to reduce blast radius of a failed release
 - Add manual approval gates and keep the human in the loop for controlled production releases
+- Review automated E2E test results and understand how output variables enable downstream automation
 
 ## Why It Matters
-This lab validates Harness's ability to safely deploy changes to production using advanced deployment strategies. Participants experience how risk is reduced through progressive delivery and manual validation, without complex scripting.
+This lab validates Harness's ability to safely deploy changes to production using advanced deployment strategies. Participants experience how risk is reduced through automated testing and progressive delivery, without complex scripting.
 
  
 
@@ -314,8 +341,6 @@ This lab validates Harness's ability to safely deploy changes to production usin
    | Stage: Backend Deploy | Service > Primary Artifact | backend | _Leave as is_ |
    | Stage: Backend Deploy | Service > Tag | backend-v1 | |
 
-![Canary Deployment](images/lab3-canary.gif "Canary Deployment")
-
 **5.** While the canary deployment is ongoing and waiting for **approval**, navigate to your deployed application to verify the canary is live.
 
    - Log in to the ROSA cluster at https://console-openshift-console.apps.rosa.u7s2r6r8i3b3v5k.4qrx.p3.openshiftapps.com/
@@ -337,6 +362,20 @@ This lab validates Harness's ability to safely deploy changes to production usin
 ![Canary Deployment](images/canary.png "I see the canary!")
 
 **6.** Approve the canary deployment for the pipeline to complete and go back to your app. You should see Captain Canary has left as his work here is done.
+
+### Review Playwright E2E Test Results
+
+Now that the pipeline has completed, let's check how our frontend E2E tests did.
+
+**7.** In the pipeline execution view, click on the **Frontend Deployment** stage, then click on the **Container Step** step inside the dotted **Playwright Tests** step box.
+
+**8.** Review the logs to see the output of the Playwright tests. You should see a summary at the bottom indicating which tests passed and which failed.
+
+**9.** At the top of the logs console, click on the **Output** tab. The template captures the test results as output variables, making them available to reference in any other part of the pipeline.
+
+![Playwright Results](images/lab4-playwright-results.gif "Playwright Results")
+
+> **Note:** These output variables can be referenced anywhere downstream in the pipeline using Harness Expressions. For example, you could append them to a ServiceNow change record for deployment evidence and auditability. We'll see how change management works in the next lab.
 
 ---
 
