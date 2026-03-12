@@ -37,7 +37,7 @@ If your artifacts aren't built consistently, nothing downstream matters. This la
 
    | Input | Value | Notes |
    | ----- | ----- | ----- |
-   | Name | workshop | *This is the name of the pipeline* |
+   | Name | `workshop` | *This is the name of the pipeline* |
    | How do you want to setup your pipeline? | Inline | *Harness (rather than Git) will be the source of truth for the pipeline* |
 
 **4.** From Pipeline Studio, click **Add Stage** and select **Build** as the Stage Type
@@ -46,9 +46,9 @@ If your artifacts aren't built consistently, nothing downstream matters. This la
 
    | Input | Value | Notes |
    | ----- | ----- | ----- |
-   | Stage Name | Build | |
+   | Stage Name | `Build` | |
    | Clone Codebase | Enabled | *The codebase will be cloned automatically* |
-   | Repository Name | harnessrepo | |
+   | Repository | `harnessrepo` | |
 
 **6.** There are **three** main tabs that need configuration:
 
@@ -58,8 +58,8 @@ If your artifacts aren't built consistently, nothing downstream matters. This la
 
    | Input | Value | Notes |
    | ----- | ----- | ----- |
-   | Paths | /harness/frontend-app/.m2/repository | *Path for the Maven repository cache* |
-   | Key | maven-cache | *A unique key to identify this cache entry* |
+   | Paths | `/harness/frontend-app/.m2/repository` | *Path for the Maven repository cache* |
+   | Key | `maven-cache` | *A unique key to identify this cache entry* |
 
    ### Infrastructure
 
@@ -73,45 +73,41 @@ If your artifacts aren't built consistently, nothing downstream matters. This la
 
    | Input | Value | Notes |
    | ----- | ----- | ----- |
-   | Name | Run Tests With Intelligence | |
-   | Command | cd frontend-app && mvn test | *Our monorepo requires navigating to the application subfolder* |
+   | Name | `Run Tests With Intelligence` | |
+   | Command | `cd frontend-app && mvn test` | *Our monorepo requires navigating to the application subfolder* |
 
    Under **Optional Configuration**:
 
    | Input | Value | Notes |
    | ----- | ----- | ----- |
-   | Container Registry | dockerhub | *Click the **Project** tab in the connector popup to find it, then select **Apply Selected*** |
-   | Image | maven:3.9-eclipse-temurin-17 | *Provides Maven + JDK 17 for the build* |
+   | Container Registry | `dockerhub` | *Click the **Project** tab in the connector popup to find it, then select **Apply Selected*** |
+   | Image | `maven:3.9-eclipse-temurin-17` | *Provides Maven + JDK 17 for the build* |
    | Intelligence Mode | Enabled | *Only runs tests affected by your code changes* |
 
    - After completing configuration select **Apply Changes**
 
    #### Compile & Push
 
-   - Select **Add Step**, then **Use template** — we'll use a pre-created template to compile the application and avoid reinventing the wheel
+   - Select **Add Step**, then **Use template**, we'll use a pre-created template to compile the application and avoid reinventing the wheel
+
+   - Select **Maven Package** and press **Use Template**, then provide a name for that template
 
    | Input | Value | Notes |
    | ----- | ----- | ----- |
-   | Template Name | Maven Package | *A reusable template for building the application with Maven* |
-
-   - Select the template and press **Use Template,** then provide a name for that template
-
-   | Input | Value | Notes |
-   | ----- | ----- | ----- |
-   | Name  | Compile | *Name of the template in the pipeline* |
+   | Name  | `Compile` | *Name of the template in the pipeline* |
 
    - Select **Add Step**, then **Add Step** again, then select **Build and Push an image to Docker Registry** from the Step Library and configure with the following
 
    | Input | Value | Notes |
    | ----- | ----- | ----- |
-   | Name  | Push to Dockerhub | |
+   | Name  | `Push to Dockerhub` | |
    | Registry Type | Third-Party Artifact Registry | |
-   | Docker Connector | dockerhub | |
-   | Docker Repository | nikpap/harness-workshop | |
-   | Tags | <+variable.username>-<+pipeline.sequenceId> | *Click on the pin icon, select **Expression**, and paste the value* |
+   | Docker Connector | `dockerhub` | |
+   | Docker Repository | `nikpap/harness-workshop` | |
+   | Tags | `<+variable.username>-<+pipeline.sequenceId>` | *Click on the pin icon, select **Expression**, and paste the value* |
    | **Optional Configuration** | | |
-   | Dockerfile | /harness/frontend-app/Dockerfile | *Points Harness to the frontend Dockerfile* |
-   | Context | /harness/frontend-app | *The build context for the Dockerfile instructions* |
+   | Dockerfile | `/harness/frontend-app/Dockerfile` | *Points Harness to the frontend Dockerfile* |
+   | Context | `/harness/frontend-app` | *The build context for the Dockerfile instructions* |
 
    - Click **Apply Changes** to close the config dialog
 
@@ -119,7 +115,7 @@ If your artifacts aren't built consistently, nothing downstream matters. This la
 
    | Input | Value | Notes |
    | ----- | ----- | ----- |
-   | Branch Name | spring | *This is prepopulated* |
+   | Branch Name | `spring` | *This is prepopulated* |
 
 ---
 
@@ -157,7 +153,7 @@ Shifting security left means catching vulnerabilities before they ever reach pro
 
    | Input | Value | Notes |
    | ----- | ----- | ----- |
-   | Branch Name | spring | |
+   | Branch Name | `spring` | |
 
 **6.** After the **Build and Push** stage is complete, go to the **Security Tests** tab to see the deduplicated, normalized, and prioritized list of vulnerabilities discovered across your scanners.
 
@@ -187,7 +183,7 @@ This lab demonstrates how teams can quickly and easily deploy software without c
 
    | Input | Value | Notes |
    | ----- | ----- | ----- |
-   | Stage Name | Frontend Deployment | |
+   | Stage Name | `Frontend Deploy` | |
    | Deployment Type | Kubernetes | |
 
 ![Click on the plus icon to add a new stage](images/lab3-deploy-stage.gif "Add Stage")
@@ -200,22 +196,22 @@ This lab demonstrates how teams can quickly and easily deploy software without c
 
    | Input | Value | Notes |
    | ----- | ----- | ----- |
-   | Name | frontend | _This is preselected for you based on the Stage type_|
+   | Name | `frontend` | _This is preselected for you based on the Stage type_|
    | Deployment Type | Kubernetes | |
    | **Add Manifest** | | |
    | Manifest Type | K8s Manifest | |
    | K8s Manifest Store | Code | |
-   | Manifest Identifier | templates | |
-   | Repository | harnessrepo | |
-   | Branch | spring | |
-   | File/Folder Path | harness-deploy/frontend/ocp/manifests | |
-   | Values.yaml | harness-deploy/frontend/ocp/values.yaml | _Click **Submit** to go back and continue configuration of the artifact source_ |
+   | Manifest Identifier | `templates` | |
+   | Repository | `harnessrepo` | |
+   | Branch | `spring` | |
+   | File/Folder Path | `harness-deploy/frontend/ocp/manifests` | |
+   | Values.yaml | `harness-deploy/frontend/ocp/values.yaml` | _Click **Submit** to go back and continue configuration of the artifact source_ |
    | **Add Artifact Source** | | |
    | Artifact Repository Type | Docker Registry | |
-   | Docker Registry Connector | dockerhub | |
-   | Artifact Source Identifier | frontend | |
-   | Image Path | nikpap/harness-workshop | |
-   | Tag | <+variable.username>-<+pipeline.sequenceId> | _Click on the purple "**Sigma**" icon to the right of the text box. A "Learn More" pop up will appear and block your view, click the "**x**" to exit it. Then select **Expression** from the dropdown and paste the value._ |
+   | Docker Registry Connector | `dockerhub` | |
+   | Artifact Source Identifier | `frontend` | |
+   | Image Path | `nikpap/harness-workshop` | |
+   | Tag | `<+variable.username>-<+pipeline.sequenceId>` | _Click on the purple "**Sigma**" icon to the right of the text box. A "Learn More" pop up will appear and block your view, click the "**x**" to exit it. Then select **Expression** from the dropdown and paste the value._ |
 
    - Click **Save** to close the service window and then click **Continue** to go to the Environment tab
 
@@ -223,7 +219,7 @@ This lab demonstrates how teams can quickly and easily deploy software without c
 
    ### Environment
 
-   The target infrastructure has been pre-created for us. The application will be deployed to a Kubernetes cluster on the given namespace  
+   The target infrastructure has been pre-created for us. The application will be deployed to a ROSA cluster on the given project
 
    - Click **- Select -** on the **"Specify Environment"** input box
 
@@ -257,8 +253,8 @@ This lab demonstrates how teams can quickly and easily deploy software without c
 
    | Input | Value | Notes |
    | ----- | ----- | ----- |
-   | Name | Playwright Tests | |
-   | BASE_URL | `https://frontend-prod-<your-project-id>-ns.apps.rosa.u7s2r6r8i3b3v5k.4qrx.p3.openshiftapps.com/` | _Replace `<your-project-id>` with your project ID. Click the purple **Sigma** button and select **Expression**_ |
+   | Name | `Playwright Tests` | |
+   | BASE_URL | `https://frontend-prod-<your-project-id>-ns.apps.rosa.u7s2r6r8i3b3v5k.4qrx.p3.openshiftapps.com/` | _Replace `<your-project-id>` with your project ID. Click the purple **Sigma** button and select **Fixed value**_ |
 
    - Click **Apply Changes**
 
@@ -293,7 +289,7 @@ This lab validates Harness's ability to safely deploy changes to production usin
 
    | Input | Value | Notes |
    | ----- | ----- | ----- |
-   | Stage Name | Backend Deploy | |
+   | Stage Name | `Backend Deploy` | |
    | Deployment Type | Kubernetes | |
 
 **3.** Configure the **backend** Stage with the following
@@ -323,7 +319,7 @@ This lab validates Harness's ability to safely deploy changes to production usin
 
      | Input | Value | Notes |
      | ----- | ----- | ----- |
-     | Name  | Approval | |
+     | Name  | `Approval` | |
      | User Groups | All Project Users | Select project to see the **"All Project Users"** option |
 
 ![Canary Approval](images/harness-approval.png "Approve the Canary Deployment")
@@ -339,17 +335,17 @@ This lab validates Harness's ability to safely deploy changes to production usin
    | CI Codebase | Branch Name | spring | _Leave as is_ |
    | Stage: Frontend Deploy | Service > Primary Artifact | frontend | _Leave as is_ |
    | Stage: Backend Deploy | Service > Primary Artifact | backend | _Leave as is_ |
-   | Stage: Backend Deploy | Service > Tag | backend-v1 | |
+   | Stage: Backend Deploy | Service > Tag | `backend-v1` | |
 
 **5.** While the canary deployment is ongoing and waiting for **approval**, navigate to your deployed application to verify the canary is live.
 
-   - Log in to the ROSA cluster at https://console-openshift-console.apps.rosa.u7s2r6r8i3b3v5k.4qrx.p3.openshiftapps.com/
+   - Log in to the ROSA cluster at `https://console-openshift-console.apps.rosa.u7s2r6r8i3b3v5k.4qrx.p3.openshiftapps.com/`
 
    - Select **Log in with "powerpay"**
 
    - Enter your credentials: username is your **project ID**, password is the same one you used to log in to Harness _(refer to the user details spreadsheet provided by your instructor)_
 
-   - Click **Project** from the left-hand sidebar
+   - Select your Project. _Wait for your pipeline to pause at the approval step before continuing_
 
    - From the **Inventory** box, click **2 Routes**
 
@@ -405,10 +401,10 @@ This lab proves that governance does not have to be manual, inconsistent, or slo
 
    | Input | Value |
    | ----- | ----- |
-   | Entity Type | Pipeline |
-   | Organization | \<your-org\> |
-   | Project | \<your-project\> |
-   | Action | On Save |
+   | Entity Type | `Pipeline` |
+   | Organization | `<your-org>` |
+   | Project | `<your-project>` |
+   | Action | `On Save` |
 
 **4.** Select your most recent pipeline save and click **Apply**.
 
@@ -486,10 +482,10 @@ This lab validates how Harness detects deployment issues based on real system be
 
    | Input | Value | Notes |
    | ----- | ----- | ----- |
-   | Name | Verify | |
+   | Name | `Verify` | |
    | Continuous Verification Type | Canary | |
    | Sensitivity | High | _Defines how sensitive the ML algorithms are to deviation from the baseline_ |
-   | Duration | 5mins | |
+   | Duration | 5min | |
 
 **4.** Within the Verify step configuration panel, select the **Advanced** tab and expand the **Failure Strategy** section. In the **Perform Action** configuration, change the behavior to **Rollback Stage**.
 
@@ -503,9 +499,9 @@ This lab validates how Harness detects deployment issues based on real system be
 
    | Input | Value | Notes |
    | ----- | ----- | ----- |
-   | Name | Chaos | |
-   | Select Chaos Experiment | <project_name>-pod-memory | _Select the existing experiment from the list_ |
-   | Expected Resilience Score | 50 | _Should already be populated for you_ |
+   | Name | `Chaos` | |
+   | Select Chaos Experiment | `<project_name>-pod-memory` | _Select the existing experiment from the list_ |
+   | Expected Resilience Score | `50` | _Should already be populated for you_ |
 
 **7.** Click on Apply Changes
 
@@ -522,12 +518,12 @@ This is where it all comes together. Watch the entire delivery pipeline flow fro
 
 ## Objectives
 - Execute the full golden path pipeline end-to-end
-- Observe canary vs baseline traffic distribution in real-time
 - Approve ServiceNow change requests to progress deployments
+- Observe canary vs baseline traffic distribution in real-time
 - Validate automated rollback if verification fails
 
 ## Why It Matters
-This lab demonstrates the full power of a modern CD platform by combining multiple safety mechanisms into a single, automated pipeline. You'll see how ServiceNow approvals ensure proper change control, how AI/ML-powered continuous verification provides objective health signals, and how chaos engineering validates real-world resilience - all working together to deliver software with confidence while maintaining system stability.
+This lab demonstrates the full power of a modern CD platform by combining multiple safety mechanisms into a single, automated pipeline. You'll see how ServiceNow approvals ensure proper change control, how AI/ML-powered continuous verification provides objective health signals, and how chaos engineering validates real-world resilience; all working together to deliver software with confidence while maintaining system stability.
 
 ## Steps
 **1.** First, we need to deploy a new version of our backend to the canary environment so we can demonstrate how to rollback a failed release. Click the **Run** button in the upper right corner to execute the pipeline but this time, select the backend-v2 in the dropdown box that pops up.
@@ -537,7 +533,7 @@ This lab demonstrates the full power of a modern CD platform by combining multip
    | CI Codebase | Branch Name | spring | _Leave as is_ |
    | Stage: Frontend Deploy | Service > Primary Artifact | frontend | _Leave as is_ |
    | Stage: Backend Deploy | Service > Primary Artifact | backend | _Leave as is_ |
-   | Stage: Backend Deploy | Service > Tag | backend-v2 | _Update from v1 to v2_ |
+   | Stage: Backend Deploy | Service > Tag | `backend-v2` | _Update from v1 to v2_ |
 
 ![Select backend-v2](images/lab7-pick-backend-v2.png "Select backend-v2")
 
@@ -545,13 +541,13 @@ This lab demonstrates the full power of a modern CD platform by combining multip
 
 - Click on the **ServiceNow Approval** stage, click on the **Approval** step, and click on the change record hyperlink in the step details on the right to open the change record in a new tab.
 
-- Next, login to the SNOW sandbox instance with the name **`workshopuser`** and the same password you used to log in to the lab. Click the **`Implement`** button in the upper right corner. While you're there, observe the metadata provided by the pipeline. Click back to the Harness tab in your browser and observe the pipeline progressing once the change record was approved.
+- Next, login to the SNOW sandbox instance with the name `workshopuser` and the same password you used to log in to the lab. Click the `Implement` button in the upper right corner. While you're there, observe the metadata provided by the pipeline. Click back to the Harness tab in your browser and observe the pipeline progressing once the change record was approved.
 
 ![ServiceNow Approval](images/lab7-snow-approval.gif "ServiceNow Approval")
 
 **3.** As the pipeline progresses to the backend deployment, navigate back to your app and see if you can spot the canary (use the check release button or refresh the page).
 
-- Validate that we've deployed the new version in the canary by checking the version is **backend-v2** and the Last Execution matches the **build Id** of your pipeline
+- Validate that we've deployed the new version in the canary by checking the version is `backend-v2` and the Last Execution matches the **build Id** of your pipeline
 
 ![Canary Verify](images/lab7-canary-verify-v2.gif "Canary Verify")
 
@@ -606,7 +602,7 @@ This lab shows how to close the loop on failed deployments by automatically upda
 
 **3.** Click the '**+**' button at the end of the pipeline to add a new step and select **Use Template**.
 
-**4.** Select the ServiceNow Close Failed template and give it a name - Close Failed Ticket.
+**4.** Select the **ServiceNow Close Failed** template and give it a name - `Close Failed Ticket`.
 
 **5.** Apply the changes and Save the pipeline. 
 
